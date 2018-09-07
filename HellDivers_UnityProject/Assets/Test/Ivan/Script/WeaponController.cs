@@ -21,6 +21,7 @@ public class WeaponController : WeaponSystem {
         m_iType = 0;
         Initalized();
     }
+
     /// <summary>
     /// Choice weapon
     /// </summary>
@@ -34,12 +35,13 @@ public class WeaponController : WeaponSystem {
         Debug.Log("E: iType = " + m_iType);
         return m_iType;
     }
+    
 
     /// <summary>
     /// Weapon's attribute follow by its level
     /// </summary>
     /// <returns></returns>
-    public int WeaponLevelUp()
+    public int WeaponLevel()
     {
         m_iLevel++;        
         return m_iLevel;
@@ -48,10 +50,12 @@ public class WeaponController : WeaponSystem {
     /// <summary>
     /// Get weapon's Info in float list
     /// </summary>
-    /// <param name="itype">weapon type</param>
+    /// <param name="etype">Weapon type</param>
+    /// <param name="level">Weapon level</param>
     /// <returns></returns>
-    public List<float> WeaponInfo(eWeaponType etype)
+    public List<float> WeaponInfo(eWeaponType etype, int level)
     {
+        m_iLevel = level;
         List<float> pList = m_dWeaponInfo[etype];
         WeaponAttribute(etype, out m_iAmmo, out m_fDamage, out m_fRefillTime, out m_fCoolTime);        
         pList[0] = m_iAmmo;
@@ -70,11 +74,5 @@ public class WeaponController : WeaponSystem {
         refilltime = pList[2] + pList[2] * m_fRefillTimeWt * m_fLevelWt * (m_iLevel - 1);
         cooltime = pList[3] + pList[3] * m_fCoolTimeWt * m_fLevelWt * (m_iLevel - 1);
     }
-
-
-
-    public void aa()
-    {
-    }
-
+       
 }

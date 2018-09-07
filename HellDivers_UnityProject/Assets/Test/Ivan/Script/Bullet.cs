@@ -1,4 +1,4 @@
-﻿///2018.09.02
+﻿    ///2018.09.02
 ///Ivan.CC
 ///
 /// Bullet behaviour.
@@ -10,7 +10,6 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 
     [SerializeField] private eWeaponType m_Type;
-    [SerializeField] private int m_Level = 1;
          
     private WeaponController m_WC;
 
@@ -28,8 +27,7 @@ public class Bullet : MonoBehaviour {
     void Start () {
         m_WC = new WeaponController();
         m_WC.Init();
-        WeaponLevel(m_Level);
-        m_WeaponData = m_WC.WeaponInfo(m_Type);
+        m_WeaponData = m_WC.WeaponInfo(m_Type, m_WC.m_iLevel);
         m_vRegion = new Vector3(m_WeaponData[4], m_WeaponData[5], 0);
         m_vOrigine = new Vector3(1, 1, 2);
         m_Region = GetComponent<BoxCollider>();
@@ -61,14 +59,6 @@ public class Bullet : MonoBehaviour {
         yield return new WaitForSeconds(1);
         m_vRegion = m_vOrigine;
         this.gameObject.SetActive(false);
-    }
-
-    private void WeaponLevel(int Level)
-    {
-        for (int i = 0; i <  Level; i++)
-        {
-            m_WC.WeaponLevelUp();
-        }
     }
 
 }

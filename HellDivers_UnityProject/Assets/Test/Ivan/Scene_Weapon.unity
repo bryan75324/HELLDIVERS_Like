@@ -241,34 +241,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &531550314
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 531550315}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &531550315
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 531550314}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 0.26}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &936864663
@@ -282,6 +254,8 @@ GameObject:
   - component: {fileID: 936864666}
   - component: {fileID: 936864665}
   - component: {fileID: 936864664}
+  - component: {fileID: 936864668}
+  - component: {fileID: 936864669}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -353,6 +327,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &936864668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 936864663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac634c078aff9a047b0c18add18bb68e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstWeapon: 0
+  SecondWeapon: 2
+  FirstWeaponLevel: 1
+  SecondWeaponLevel: 1
+--- !u!114 &936864669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 936864663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ec9d32412e4ae34f9c091ef79b956db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1356338306
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,11 +534,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1534823432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6bbbe65df78fc4d952588c07645b3f, type: 3}
+  m_Script: {fileID: 11500000, guid: 90770a5a6e995f54e9cfaf0627c31ed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapons: 0300000002000000
-  m_tGunPos: {fileID: 223108242}
 --- !u!1 &1578360255
 GameObject:
   m_ObjectHideFlags: 0

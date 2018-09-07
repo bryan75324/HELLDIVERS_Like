@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33754516441996758}
   - component: {fileID: 23701011688270284}
   - component: {fileID: 65208791925730086}
-  - component: {fileID: 114610994929027982}
+  - component: {fileID: 114009852648005854}
   m_Layer: 0
-  m_Name: Bullet_Rifle
+  m_Name: Bullet_ShotGun
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1980740524139538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000002, y: 1, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114610994929027982
+--- !u!114 &114009852648005854
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1980740524139538}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 956c30d6cc5227642948555e83a6f199, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a6f4812c33d1804e83530344fd0323e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Type: 0
+  m_Type: 2

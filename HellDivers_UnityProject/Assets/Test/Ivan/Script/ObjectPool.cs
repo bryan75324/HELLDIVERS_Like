@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool  {
+public class ObjectPool : MonoBehaviour {
 
     public class GameObjectData
     {
@@ -19,10 +19,17 @@ public class ObjectPool  {
 
     private Dictionary<int, List<GameObjectData>> m_dObjectDitc;
 
-    public void Init()
+    public ObjectPool()
     {
-        m_Instance = this;
-        m_dObjectDitc = new Dictionary<int, List<GameObjectData>>();
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+            m_dObjectDitc = new Dictionary<int, List<GameObjectData>>();
+        }
+        else
+        {
+            DestroyImmediate(this.gameObject);
+        }
     }
 
     public void InitGameObjects(Object o, int iCount, int iType)
@@ -37,6 +44,7 @@ public class ObjectPool  {
         else
         {
             pList = m_dObjectDitc[iType];
+            //need safer
         }
         for (int i = 0; i < iCount; i++)
         {
