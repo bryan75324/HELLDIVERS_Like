@@ -29,8 +29,13 @@ public class GameMain : MonoBehaviour
     {
         if (m_playerInfo != null)
         {
-            GameObject playerGo = new GameObject("Player", typeof(Player));
+            GameObject playerGo = Resources.Load("Characters/Ch00/ch01") as GameObject;
+            playerGo = Instantiate(playerGo, this.transform.parent);
+            playerGo.transform.position -= Vector3.up;
+            playerGo.AddComponent<Player>();
             playerGo.GetComponent<Player>().Info = m_playerInfo;
+            //GameObject playerGo = new GameObject("Player", typeof(Player));
+            //playerGo.GetComponent<Player>().Info = m_playerInfo;
         }
     }
 

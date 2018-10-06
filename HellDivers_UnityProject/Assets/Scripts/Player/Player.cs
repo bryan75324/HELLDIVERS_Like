@@ -19,17 +19,17 @@ public class Player : MonoBehaviour
     {
         this.tag = "Player";
 
-        Display = Resources.Load("Characters/Ch00/ch00") as GameObject;
-        Display = Instantiate(Display, this.transform);
-        Display.transform.position -= Vector3.up;
+        //Display = Resources.Load("Characters/Ch00/ch01") as GameObject;
+        //Display = Instantiate(Display, this.transform);
+        //Display.transform.position -= Vector3.up;
 
-        if (Display != null)
-        {
+        //if (Display != null)
+        //{
             Anima = Display.GetComponent<Animator>();
             Parts = Display.GetComponent<PlayerParts>();
 
             Camera.main.GetComponent<CameraController>().m_Player = Display.transform;
-        }
+        //}
     }
 
     // Use this for initialization

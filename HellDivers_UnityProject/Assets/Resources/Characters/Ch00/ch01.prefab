@@ -292,10 +292,8 @@ GameObject:
   - component: {fileID: 95496215402139182}
   - component: {fileID: 143033676911226046}
   - component: {fileID: 114685507022940852}
-  - component: {fileID: 114923368248744430}
-  - component: {fileID: 114145470799235876}
   m_Layer: 0
-  m_Name: TestCH00
+  m_Name: ch01
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1993,25 +1991,14 @@ Animator:
   m_GameObject: {fileID: 1328587470451250}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: eb1432be680939444b75915f72a35147, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0231577707e6c0b4095a7ea3e533c139, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
+  m_Controller: {fileID: 9100000, guid: 23ad2f2ca581b4a448482b717947c7e8, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114145470799235876
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1328587470451250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 804f4085b8a0c5e4d85344c31b802de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114685507022940852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2025,18 +2012,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LaunchPoint: {fileID: 0}
   RightHand: {fileID: 0}
---- !u!114 &114923368248744430
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1328587470451250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f7829661405fb94ab60ea0559d44ff3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Speed: 1
 --- !u!137 &137018900884298514
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

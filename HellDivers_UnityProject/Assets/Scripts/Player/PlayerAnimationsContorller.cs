@@ -34,160 +34,64 @@ public enum ePlayerAnyState
 
 public class PlayerAnimationsContorller : MonoBehaviour
 {
-    [SerializeField] private Animator m_Animator;
-    public static ePlayerAnimationState m_MoveState;
-    public static ePlayerAttack m_AttackState;
-    public static ePlayerAnyState m_AnyState;
-    private Transform m_Cam;
-    private Vector3 m_CamFoward;
-    private Vector3 m_Direction;
-    private float m_Right;
-    private float m_Forward;
-    private float cSpeed = 0f;
+    private float m_TurnAmount;
+    private float m_ForwardAmount;
+    private Animator m_Animator;
+    private float m_BattleRight;
+    private float m_BattleForward;
 
     private void Start()
     {
-        if (Camera.main != null)
+        m_Animator = this.GetComponent<Animator>();
+        if (m_Animator == null)
         {
-            m_Cam = Camera.main.transform;
-        }
-
-        if (m_Animator == null) m_Animator = this.GetComponent<Player>().Anima;
-
-        m_AttackState = ePlayerAttack.ANI_GUNPLAY;
-        m_AnyState = ePlayerAnyState.ANI_IDLE;
-    }
-
-    private void Update()
-    {
-        MovrDirection();
-        DisplayMoveState();
-        DisplayAttackState();
-        CheckState();
-        if (m_MoveState == ePlayerAnimationState.ANI_DEATH)
-        {
-            m_Animator.SetTrigger("Death");
-        }
-        if (m_AnyState == ePlayerAnyState.ANI_GETHURT)
-        {
-            m_AnyState = ePlayerAnyState.ANI_IDLE;
-            m_Animator.SetTrigger("GetHurt");
-        }
-        if (m_AnyState == ePlayerAnyState.ANI_ROLL)
-        {
-            m_AnyState = ePlayerAnyState.ANI_IDLE;
-            m_Animator.SetTrigger("Roll");
+            m_Animator = this.GetComponent<Player>().Anima;
         }
     }
-
-    private void MovrDirection()
+    public void Move(Vector3 move, Vector3 direction, bool run, bool inBattle, bool attack)
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
-
-        if (m_Cam != null)
+        if (!inBattle)
         {
-            m_CamFoward = Vector3.Scale(m_Cam.forward, Vector3.forward + Vector3.right);
-            m_Direction = m_CamFoward.normalized * v + m_Cam.right * h;
-        }
-        else
-        {
-            m_Direction = Vector3.forward * v + Vector3.right * h;
+            move = transform.InverseTransformDirection(move);
+            m_ForwardAmount = move.z;
+            m_TurnAmount = Mathf.Atan2(move.x, move.z);
+            if (run) m_ForwardAmount *= 2;
         }
 
-        m_Right = Vector3.Dot(this.transform.right, m_Direction.normalized);
-        m_Forward = Vector3.Dot(this.transform.forward, m_Direction.normalized);
+        else if (inBattle)
+        {
+            Vector3 currentMove = direction;
+            direction = transform.InverseTransformDirection(direction);
+            m_TurnAmount = Mathf.Atan2(direction.x, direction.z);
+            m_BattleRight = Vector3.Dot(this.transform.right, move.normalized);
+            m_BattleForward = Vector3.Dot(this.transform.forward, move.normalized);
+            move = currentMove;
+        }
+        ApplyExtraTurnRotation();
+        UpdateAnimator(move, inBattle, attack);
     }
 
-    private void DisplayMoveState()
+    void ApplyExtraTurnRotation()
     {
-        float minSpeed = 0f;
-        float maxSpeed = 2f;
-        float addSpeed = 5f;
-
-        if (cSpeed > 2) cSpeed = maxSpeed;
-        if (cSpeed < 0) cSpeed = minSpeed;
-
-        if (m_MoveState == ePlayerAnimationState.ANI_TURNRIGHT90)
+        float turnSpeed = Mathf.Lerp(180f, 360f, m_ForwardAmount);
+        transform.Rotate(0, m_TurnAmount * turnSpeed * Time.deltaTime, 0);
+    }
+    void UpdateAnimator(Vector3 move, bool inBattle, bool attack)
+    {
+        if (!inBattle)
         {
-            m_Animator.SetBool("bTurn", true);
-            m_Animator.SetFloat("Turn", 0);
-
-            AnimatorStateInfo info = m_Animator.GetCurrentAnimatorStateInfo(0);
-            if (info.normalizedTime >= 1.0f)
-            {
-                m_Animator.SetBool("bTurn", false);
-            }
+            m_Animator.SetBool("WalkShoot", false);
+            m_Animator.SetBool("RotateStart", false);
+            m_Animator.SetFloat("Turn", m_TurnAmount * 0.63f, 0.1f, Time.deltaTime);
+            m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
         }
-        else if (m_MoveState == ePlayerAnimationState.ANI_TURNLEFT90)
+        else if (inBattle)
         {
-            m_Animator.SetBool("bTurn", true);
-            m_Animator.SetFloat("Turn", 1);
-            m_Animator.SetBool("bTurn", false);
-        }
-
-        if (m_MoveState == ePlayerAnimationState.ANI_IDLE)
-        {
-            cSpeed = Mathf.MoveTowards(cSpeed, 0f, addSpeed * 2 * Time.deltaTime);
-        }
-        else if (m_MoveState == ePlayerAnimationState.ANI_WALK)
-        {
-            cSpeed = Mathf.MoveTowards(cSpeed, 1f, addSpeed * Time.deltaTime);
-        }
-        else if (m_MoveState == ePlayerAnimationState.ANI_RUN)
-        {
-            cSpeed = Mathf.MoveTowards(cSpeed, 2f, addSpeed * Time.deltaTime);
-        }
-
-        m_Animator.SetFloat("Move", cSpeed);
-
-        if (m_MoveState == ePlayerAnimationState.ANI_WALKSHOOT)
-        {
+            if (Vector3.Angle(this.transform.forward, move) > 20) m_Animator.SetBool("RotateStart", true);
             m_Animator.SetBool("WalkShoot", true);
-            m_Animator.SetFloat("WalkForward", m_Forward);
-            m_Animator.SetFloat("WalkRight", m_Right);
-        }
-    }
-
-    private void DisplayAttackState()
-    {
-        if (m_AttackState == ePlayerAttack.ANI_SWITCHWEAPON)
-        {
-            m_Animator.SetTrigger("SwitchWeapon");
-            m_AttackState = ePlayerAttack.ANI_GUNPLAY;
-        }
-        else if (m_AttackState == ePlayerAttack.ANI_THROW)
-        {
-            m_AttackState = ePlayerAttack.ANI_THROWSTANDBY;
-            m_Animator.SetTrigger("ThrowStandBy");
-        }
-        else if (m_AttackState == ePlayerAttack.ANI_RELOAD)
-        {
-            m_AttackState = ePlayerAttack.ANI_GUNPLAY;
-            m_Animator.SetTrigger("Reload");
-        }
-        else if (m_AttackState == ePlayerAttack.ANI_SHOOT)
-        {
-            m_Animator.SetBool("Shoot", true);
-        }
-        else if (m_AttackState == ePlayerAttack.ANI_THROWOUT)
-        {
-            m_AttackState = ePlayerAttack.ANI_GUNPLAY;
-            m_Animator.SetTrigger("ThrowOut");
-        }
-    }
-
-    private void CheckState()
-    {
-        if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
-        {
-            PlayerAnimationsContorller.m_AttackState = ePlayerAttack.ANI_GUNPLAY;
-            m_Animator.SetBool("WalkShoot", false);
-            m_Animator.SetBool("Shoot", false);
-        }
-        if (!Input.GetButton("Horizontal") && !Input.GetButton("Vertical"))
-        {
-            m_Animator.SetBool("WalkShoot", false);
+            m_Animator.SetFloat("Turn", m_TurnAmount * 0.63f, 0.1f, Time.deltaTime);
+            m_Animator.SetFloat("WalkForward", m_BattleForward, 0.1f, Time.deltaTime);
+            m_Animator.SetFloat("WalkRight", m_BattleRight, 0.1f, Time.deltaTime);
         }
     }
 }
