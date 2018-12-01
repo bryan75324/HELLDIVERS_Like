@@ -10,7 +10,7 @@ public class FishAI : Character
     public MobInfo m_AIData;
     public eFSMStateID m_CurrentState;
     private MobAnimationsController m_MobAnimator;
-    private BoxCollider m_CapsuleCollider;
+    private BoxCollider m_BodyCollider;
     private CapsuleCollider m_DamageCollider;
     private float Timer = 2.0f;
 
@@ -32,7 +32,7 @@ public class FishAI : Character
         m_AIData.m_Go = this.gameObject;
         m_bDead = false;
         m_CurrentHp = m_MaxHp;
-        m_CapsuleCollider.enabled = true;
+        m_BodyCollider.enabled = true;
         m_DamageCollider.enabled = true;
         m_FSM.PerformTransition(eFSMTransition.Go_Respawn);
         if (OnSpawn != null) OnSpawn();
@@ -46,7 +46,7 @@ public class FishAI : Character
         base.Start();
 
         m_MobAnimator = this.GetComponent<MobAnimationsController>();
-        m_CapsuleCollider = this.GetComponent<BoxCollider>();
+        m_BodyCollider = this.GetComponent<BoxCollider>();
         m_DamageCollider = this.GetComponentInChildren<CapsuleCollider>();
         m_FSM = new FSMSystem(m_AIData);
         m_AIData.m_Go = this.gameObject;
@@ -172,13 +172,16 @@ public class FishAI : Character
 
         GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(3003);
         BloodSpurt bloodSpurt = go.GetComponent<BloodSpurt>();
-        bloodSpurt.Init(this.gameObject, hitPoint);
 
         if (m_CurrentHp <= 0)
         {
-            m_CapsuleCollider.enabled = false;
+            m_BodyCollider.enabled = false;
             m_DamageCollider.enabled = false;
             StartCoroutine(Displacement(hitPoint, 0.2f));
+
+            go = ObjectPool.m_Instance.LoadGameObjectFromPool(3004);
+            bloodSpurt = go.GetComponent<BloodSpurt>();
+            bloodSpurt.Init(m_AIData, this.transform.position + Vector3.up);
             Death();
 
             damager.Damager.Record.NumOfKills++;
@@ -188,6 +191,7 @@ public class FishAI : Character
         }
         else
         {
+            bloodSpurt.Init(m_AIData, hitPoint);
             PerformGetHurt(hitPoint);
         }
         return true;

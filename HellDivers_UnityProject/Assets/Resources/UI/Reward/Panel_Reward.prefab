@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 114094465899927844}
   - component: {fileID: 114198647638360024}
   - component: {fileID: 225397370451601096}
-  - component: {fileID: 114049236864766330}
+  - component: {fileID: 114541680543537630}
   m_Layer: 5
   m_Name: GameTime
   m_TagString: Untagged
@@ -250,14 +250,14 @@ GameObject:
   - component: {fileID: 224396497055099192}
   - component: {fileID: 222350829401516758}
   - component: {fileID: 114584614654501936}
-  - component: {fileID: 114844459371306858}
+  - component: {fileID: 114293177732504636}
   m_Layer: 5
   m_Name: Img_Cover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1806297848568274
 GameObject:
   m_ObjectHideFlags: 1
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 114794493723528564}
   - component: {fileID: 114055226400823314}
   - component: {fileID: 225630288599198304}
-  - component: {fileID: 114789904164775330}
+  - component: {fileID: 114084654046682590}
   - component: {fileID: 114792290408066902}
   m_Layer: 5
   m_Name: MissionEXP
@@ -333,36 +333,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &114049236864766330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1755069183028556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e3cb5b01e1c0a4e8b8b6df637ba347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_time: 1
-  m_AnimaCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!114 &114055226400823314
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -423,6 +393,36 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &114084654046682590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1871063877695766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf051c7360545140befbd8fc1c605c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_time: 1
+  m_AnimaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114088560966329612
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -566,6 +566,37 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &114293177732504636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1791600315805166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7cec1aa558e234f83e2f8fd0e114ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_time: 1
+  m_AnimaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  m_Image: {fileID: 114584614654501936}
 --- !u!114 &114297968723571486
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -664,6 +695,36 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
+--- !u!114 &114541680543537630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1755069183028556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf051c7360545140befbd8fc1c605c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_time: 1
+  m_AnimaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114584614654501936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -677,7 +738,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -821,36 +882,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114789904164775330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1871063877695766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e3cb5b01e1c0a4e8b8b6df637ba347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_time: 1
-  m_AnimaCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
 --- !u!114 &114792290408066902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -896,22 +927,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'XP ####'
---- !u!114 &114844459371306858
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1791600315805166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7422bf5b77854b4f8bdc795cb00d2bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Image: {fileID: 114584614654501936}
-  m_StratAlpha: 1
-  m_TargetAlpha: 0
-  m_DeadZone: 0.05
-  m_Lerp: 0.025
 --- !u!114 &114897793002962678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -923,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb590c3181ed9c488996fc1da7e8ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BlackCardTween: {fileID: 114844459371306858}
+  m_BlackCardTween: {fileID: 114293177732504636}
   m_GameTime: {fileID: 114094465899927844}
   m_PanelMissionReward: {fileID: 224760922801155196}
   m_MissionRewardPrefab: {fileID: 114261995783243416, guid: ebdfa4527c8d0d147a7ecc885c1ba280,

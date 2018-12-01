@@ -12,6 +12,7 @@ public enum eMapPointType
     PATROL,
     TANK,
     MISSIONTOWER,
+    SPAWNPOINT,
 }
 
 public class UIRadarPoint : MonoBehaviour

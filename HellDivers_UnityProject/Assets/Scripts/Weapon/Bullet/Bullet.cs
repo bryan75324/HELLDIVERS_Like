@@ -132,6 +132,7 @@ public class Bullet : MonoBehaviour, IDamager
         else if (Physics.Raycast(transform.position, transform.forward, out rh, m_fNextPosDis, 1 << LayerMask.NameToLayer("Obstcale")))
         {
             PlayHitEffect(rh.normal, rh.point, 20);
+            PlayHitSound(997);
             BulletDeath();
         }
     }
@@ -144,6 +145,13 @@ public class Bullet : MonoBehaviour, IDamager
         go.transform.position = pos;
         go.SetActive(true);
         go.GetComponent<EffectController>().EffectStart();
+    }
+
+    private void PlayHitSound(int id)
+    {
+        GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(id);
+        if (go == null) return;
+        go.SetActive(true);
     }
 
     //Bullet play death and reset private field

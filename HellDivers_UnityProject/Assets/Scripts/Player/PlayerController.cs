@@ -146,27 +146,31 @@ public class PlayerController : MonoBehaviour
         #region Input
         m_CurrentState = m_PlayerFSM.CurrentStateID;
         m_GlobalState = m_PlayerFSM.CurrentGlobalStateID;
-        if (Input.GetKeyDown(KeyCode.V))
+        if(m_GlobalState != ePlayerFSMStateID.DeadStateID)
         {
-            PerformPlayerVictory();
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Debug.Log("Total Kill : " + MobManager.m_Instance.TotalKill);
-            Debug.Log("Total Fish Kill : " + MobManager.m_Instance.TotalFishKill);
-            Debug.Log("Total Patrol Kill : " + MobManager.m_Instance.TotalPatrolKill);
-        }
-        if (Input.GetButtonDown("Roll") || Input.GetKeyDown(m_InputSetting.Roll))
-        {
-            AnimatorStateInfo info = m_PAC.Animator.GetCurrentAnimatorStateInfo(3);
-            if (m_PAC.Animator.IsInTransition(3) || info.IsName("Roll"))
+            if (Input.GetKeyDown(KeyCode.V))
             {
+                PerformPlayerVictory();
+            }
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                Debug.Log("Total Kill : " + MobManager.m_Instance.TotalKill);
+                Debug.Log("Total Fish Kill : " + MobManager.m_Instance.TotalFishKill);
+                Debug.Log("Total Patrol Kill : " + MobManager.m_Instance.TotalPatrolKill);
+            }
+            if (Input.GetButtonDown("Roll") || Input.GetKeyDown(m_InputSetting.Roll))
+            {
+                AnimatorStateInfo info = m_PAC.Animator.GetCurrentAnimatorStateInfo(3);
+                if (m_PAC.Animator.IsInTransition(3) || info.IsName("Roll"))
+                {
+                    return;
+                }
+
+                PerformPlayerRoll();
                 return;
             }
-
-            PerformPlayerRoll();
-            return;
         }
+       
         #endregion
         m_PlayerFSM.DoState();
         SelectMotionState();

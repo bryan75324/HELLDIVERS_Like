@@ -18,10 +18,12 @@ public class SetPlayerWeapon : MonoBehaviour {
         [SerializeField] GameObject m_StratagemeUI;
         [SerializeField] GameObject m_SelectWeapon;
         [SerializeField] GameObject m_SelectStratagem;
-    [Header("== Set Panel  ==")]
+    [Header("== Set Panel ==")]
         [SerializeField] GameObject m_PrimaryWeapon;
         [SerializeField] GameObject m_SecondaryWeapon;
         [SerializeField] GameObject m_Stratagem;
+    [Header("== Set Audio ==")]
+        [SerializeField] AudioSource m_Audio;
     [Header("== Private Field  ==")]
     [SerializeField] int _CurStratagemPos;
     #endregion
@@ -57,6 +59,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         SetPlayer(PlayerID);
         m_CurrentObject = m_Confirm.gameObject;
         OnSelect();
+        m_Audio.Stop();
         SubscriptAxisEvent();
     }
 
@@ -140,7 +143,13 @@ public class SetPlayerWeapon : MonoBehaviour {
     public void SetPriWeaponID(int i) { PriWeaponID = i; }
 
     public void SetSecWeaponID(int i) { SecWeaponID = i; }
-    
+
+    public void PlayAudio()
+    {
+        m_Audio.pitch = Random.Range(0.95f, 1.5f);
+        m_Audio.Play();
+    }
+
     #endregion
 
     #region Panel Click Event
@@ -213,6 +222,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         if (right) _CurStratagemPos++;
         else _CurStratagemPos--;
         m_Stratagems[CurStratagemPos].GetComponent<LobbyUI_Stratagems>().SetHighlightBG();
+        PlayAudio();
     }
 
     private void NavRight()
@@ -298,6 +308,7 @@ public class SetPlayerWeapon : MonoBehaviour {
             SetObject(m_Stratagem, m_Confirm.gameObject);
             OnConfirm();
         }
+        PlayAudio();
     }
 
     private void DisSelect()
@@ -353,7 +364,7 @@ public class SetPlayerWeapon : MonoBehaviour {
 
     private void GetRich()
     {
-        PlayerManager.Instance.Players[PlayerID].info.AddMoney(2000);
+        PlayerManager.Instance.Players[PlayerID].info.AddMoney(5000);
         Debug.LogWarning("Money: " + PlayerManager.Instance.Players[PlayerID].info.Money);
     }
 
@@ -363,6 +374,7 @@ public class SetPlayerWeapon : MonoBehaviour {
 
     private void ButtonUp()
     {
+        if(m_CurrentObject == m_PrimaryWeapon) return; 
         DisSelect();
         m_CurrentObject = m_UpObject;
         OnSelect();
@@ -370,6 +382,7 @@ public class SetPlayerWeapon : MonoBehaviour {
 
     private void ButtonDown()
     {
+        if (m_CurrentObject == m_Confirm.gameObject) return;
         DisSelect();
         m_CurrentObject = m_DownObject;
         OnSelect();

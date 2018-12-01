@@ -755,7 +755,6 @@ public class FSMRemoteAttackState : FSMState
         {
             data.m_AnimationController.SetAnimator(m_StateID);
             Count++;
-            Fire(data);
         }
     }
 
@@ -766,20 +765,16 @@ public class FSMRemoteAttackState : FSMState
         {
             if (info.normalizedTime > 0.8f)
             {
+                GOBullet = ObjectPool.m_Instance.LoadGameObjectFromPool(3402);
+                if (GOBullet == null) return;
+                GOBullet.transform.position = data.m_Go.transform.position + Vector3.up;
+                GOBullet.transform.forward = data.m_Go.transform.forward;
+                GOBullet.transform.Rotate(new Vector3(0, 0, 0));
                 GOBullet.SetActive(true);
                 data.m_FSMSystem.PerformTransition(eFSMTransition.Go_TankIdle);
             }
             return;
         }
-    }
-
-    private void Fire(MobInfo data)
-    {
-        GOBullet = ObjectPool.m_Instance.LoadGameObjectFromPool(3201);
-        if (GOBullet == null) return;
-        GOBullet.transform.position = data.m_Go.transform.position + Vector3.up;
-        GOBullet.transform.forward = data.m_Go.transform.forward;
-        GOBullet.transform.Rotate(new Vector3(0, 0, 0));
     }
 }
 

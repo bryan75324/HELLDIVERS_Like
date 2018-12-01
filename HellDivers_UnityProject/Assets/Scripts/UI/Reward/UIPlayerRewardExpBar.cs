@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 namespace HELLDIVERS.UI
 {
-    [RequireComponent(typeof(UITweenCanvasGroup))]
+    [RequireComponent(typeof(UITweenCanvasAlpha))]
     public class UIPlayerRewardExpBar : MonoBehaviour
     {
-        public UITweenCanvasGroup CanvasTween { get { return m_CanvasTween; } }
+        public UITweenCanvasAlpha CanvasTween { get { return m_CanvasTween; } }
         public int CurrentRank { get { return m_CurrentRank.Rank; } }
 
         public delegate void ExpBarEventHolder();
@@ -17,7 +17,7 @@ namespace HELLDIVERS.UI
 
         [SerializeField] private Text m_textExp;
         [SerializeField] private Image m_imgFill;
-        private UITweenCanvasGroup m_CanvasTween;
+        private UITweenCanvasAlpha m_CanvasTween;
         private int m_CurrentExp;
         private int m_TargetExp;
         private RankData m_CurrentRank;
@@ -36,7 +36,6 @@ namespace HELLDIVERS.UI
             RefreshBar();
         }
 
-        [ContextMenu("Play")]
         public void DoEvaluate()
         {
             StartCoroutine(EvaluateExpToTarget());
@@ -44,17 +43,7 @@ namespace HELLDIVERS.UI
 
         private void Awake()
         {
-            m_CanvasTween = this.GetComponent<UITweenCanvasGroup>();
-        }
-
-        // Use this for initialization
-        private void Start()
-        {
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
+            m_CanvasTween = this.GetComponent<UITweenCanvasAlpha>();
         }
 
         private IEnumerator EvaluateExpToTarget()

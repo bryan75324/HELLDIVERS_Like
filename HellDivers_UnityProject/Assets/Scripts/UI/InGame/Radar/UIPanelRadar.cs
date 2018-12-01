@@ -8,8 +8,9 @@ public class UIPanelRadar : MonoBehaviour {
     public delegate void UIRadarEventHolder();
     public event UIRadarEventHolder UpdatePoint;
 
-    #region Variable
     public static UIPanelRadar Instance { get; private set; }
+
+    #region Variable
     private GameObject m_GORadarPoint;
     public float RectWidth { get { return m_RectWidth; } }
     public float RectHeight { get { return m_RectHeight; } }
@@ -56,6 +57,8 @@ public class UIPanelRadar : MonoBehaviour {
         CountTimer();
 
         #region Input
+        
+
         if (Input.GetKeyDown(KeyCode.G))
         {
             MobManager.m_Instance.SpawnMobs(1, 0, 0, 0);
@@ -179,7 +182,7 @@ public class UIPanelRadar : MonoBehaviour {
         {
             if(m_PointList.Count > 0)
             {
-                UpdatePoint();
+                if(UpdatePoint != null) UpdatePoint();
             }
             m_Timer = 0.0f;
         }

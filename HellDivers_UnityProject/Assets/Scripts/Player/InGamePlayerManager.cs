@@ -50,13 +50,11 @@ public class InGamePlayerManager : MonoBehaviour
         UIInGameMain.Instance.AddPlayer(player);
     }
 
-    public void SpawnPlayers()
+    public void SpawnPlayers(Transform pos)
     {
         if (m_PlayerMap.Count <= 0) return;
-        if (MapInfo.Instance == null) return;
 
-        int indexSpawnPos = Random.Range(0, MapInfo.Instance.SpawnPos.Count - 1);
-        Transform spawnPos = MapInfo.Instance.SpawnPos[indexSpawnPos];
+        Transform spawnPos = pos;
 
         foreach (KeyValuePair<Player, PlayerInfo> player in m_PlayerMap)
         {

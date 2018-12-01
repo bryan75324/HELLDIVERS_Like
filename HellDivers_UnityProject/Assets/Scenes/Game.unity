@@ -1767,6 +1767,8 @@ MonoBehaviour:
     type: 2}
   m_DynamicHpBar: {fileID: 114112235941307610, guid: cbd0e436a13241946b1dab8301dea9e9,
     type: 2}
+  m_PanelMissionBriefing: {fileID: 114454172675400022, guid: c939c4d1b30dd484da5c5c6849753a64,
+    type: 2}
   m_PanelMissionInfo: {fileID: 114188567437835620, guid: 3b1811c2960f4c44a838cf4f37669e56,
     type: 2}
   m_DynamicMissionMsg: {fileID: 114561388735397984, guid: 608ed4d4dc8aace41a4ece3f160d53f2,

@@ -6,12 +6,11 @@ using UnityEngine.EventSystems;
 
 namespace HELLDIVERS.UI
 {
-    [RequireComponent(typeof(TweenAlpha))]
     public class UIPanelReward : MonoBehaviour
     {
         #region SerializeField
 
-        [SerializeField] private TweenAlpha m_BlackCardTween;
+        [SerializeField] private UITweenImageAlpha m_BlackCardTween;
         [SerializeField] private Text m_GameTime;
         [SerializeField] private Transform m_PanelMissionReward;
         [SerializeField] private UIMissionReward m_MissionRewardPrefab;
@@ -32,8 +31,8 @@ namespace HELLDIVERS.UI
             CreatePlayerRewardElement();
             CreateMissionRewardElement();
 
-            m_BlackCardTween.OnFinished += StartDrawUI;
-            m_BlackCardTween.PlayForward();
+            m_BlackCardTween.OnTweenFinished += StartDrawUI;
+            m_BlackCardTween.PlayBackward();
 
             m_BtnContinue.gameObject.SetActive(false);
         }
@@ -74,8 +73,8 @@ namespace HELLDIVERS.UI
         public void ClickContinueBtn()
         {
             MusicManager.Instance.FadeOut(1);
-            m_BlackCardTween.OnFinished += SceneChangeToLobby;
-            m_BlackCardTween.PlayeBackward();
+            m_BlackCardTween.OnTweenFinished += SceneChangeToLobby;
+            m_BlackCardTween.PlayForward();
         }
 
         #endregion Public Function
@@ -84,18 +83,18 @@ namespace HELLDIVERS.UI
 
         private void PrintGameTime()
         {
-            m_BlackCardTween.OnFinished -= PrintGameTime;
+            m_BlackCardTween.OnTweenFinished -= PrintGameTime;
             float gameTime = InGameRewardManager.Instance.GameDurationTime;
             string minutes = Mathf.Floor(gameTime / 60).ToString("00");
             string seconds = (gameTime % 60).ToString("00");
             m_GameTime.text = string.Format("Mission Time - {0}:{1}", minutes, seconds);
-            UITweenCanvasGroup tween = m_GameTime.GetComponent<UITweenCanvasGroup>();
-            tween.Play();
+            UITweenCanvasAlpha tween = m_GameTime.GetComponent<UITweenCanvasAlpha>();
+            tween.PlayForward();
         }
 
         private void CreatePlayerRewardElement()
         {
-            m_BlackCardTween.OnFinished -= CreatePlayerRewardElement;
+            m_BlackCardTween.OnTweenFinished -= CreatePlayerRewardElement;
             if (InGameRewardManager.Instance == null || InGameRewardManager.Instance.PlayerRewardMap.Count <= 0) return;
 
             MissionReward missionReward = InGameRewardManager.Instance.CaculateAllMissionReward();
@@ -151,7 +150,7 @@ namespace HELLDIVERS.UI
 
         private void SceneChangeToLobby()
         {
-            m_BlackCardTween.OnFinished -= SceneChangeToLobby;
+            m_BlackCardTween.OnTweenFinished -= SceneChangeToLobby;
             if (InGameRewardManager.Instance != null) InGameRewardManager.Instance.ApplyRewardToPlayers();
             if (SceneController.Instance != null) SceneController.Instance.ToLobby();
         }

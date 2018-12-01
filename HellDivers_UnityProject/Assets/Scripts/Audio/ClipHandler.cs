@@ -18,8 +18,14 @@ public class ClipHandler : MonoBehaviour {
         UnLoad();
     } 
 
+    private void SetPitch()
+    {
+        m_Audio.pitch = Random.Range(0.95f, 1.4f);
+    }
+
     private void OnEnable()
     {
+        SetPitch();
         StartCoroutine(WaitToUnLoad());
     }
 

@@ -33,6 +33,10 @@ public class PlayArmoury : MonoBehaviour {
             if (f_Timer < 0)
             {
                 SceneController.Instance.ToGameScene();
+                foreach (int player in Members)
+                {
+                    PlayerManager.Instance.SavePlayerInfo(player);
+                }
                 b_Loding = true;
             }
             f_Timer -= Time.fixedDeltaTime;

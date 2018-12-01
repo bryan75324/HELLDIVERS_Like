@@ -50,13 +50,7 @@ public class MissionManager
 
     public void CreateMission(eMissionType type, Transform pos = null)
     {
-        Mission mission = m_Factory.CreateMission(type);
-
-        if (pos != null)
-        {
-            mission.transform.parent = pos;
-            mission.transform.position = pos.position;
-        }
+        Mission mission = m_Factory.CreateMission(type, pos);
 
         List<Mission> pList;
         if (m_Missions.ContainsKey(mission.Priority))

@@ -20,6 +20,8 @@ public class ControlEvent : MonoBehaviour {
     public event AxisEvent AxisCancel;
     public event AxisEvent AxisSecret;
 
+    private float timer;
+    private float timeBetweenInputs = 0.25f;
 
     // Use this for initialization
     void Start()
@@ -38,50 +40,58 @@ public class ControlEvent : MonoBehaviour {
         timer -= Time.fixedDeltaTime;
     }
 
-    private void InputSetting(ControllerSetting m_controller)
+    private bool InputSetting(ControllerSetting m_controller)
     {
         if (Input.GetAxis(m_controller.Vertical) > 0 || Input.GetAxis("Vertical") > 0)
         {
             if (AxisUp != null) AxisUp();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetAxis(m_controller.Vertical) < 0 || Input.GetAxis("Vertical") < 0)
         {
             if (AxisDown != null) AxisDown();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetAxis(m_controller.Horizontal) > 0 || Input.GetAxis("Horizontal") > 0)
         {
             if (AxisRight != null) AxisRight();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetAxis(m_controller.Horizontal) < 0 || Input.GetAxis("Horizontal") < 0)
         {
             if (AxisLeft != null) AxisLeft();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetKeyDown(m_controller.Submit) || Input.GetKeyDown(KeyCode.Space))
         {
             if (AxisSubmit != null) AxisSubmit();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetKeyDown(m_controller.Cancel)|| Input.GetKeyDown(KeyCode.Escape))
         {
             if (AxisCancel != null) AxisCancel();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetButtonDown("Return") || Input.GetKeyDown(KeyCode.Backspace))
         {
             PlayerManager.Instance.UnloadPlayerMap();
             SceneController.Instance.ToLauncher();
             timer = timeBetweenInputs;
+            return true;
         }
         else if (Input.GetKeyDown(KeyCode.M))
         {
             if (AxisSecret != null) AxisSecret();
             timer = timeBetweenInputs;
+            return true;
         }
+        return false;
     }
-    private float timer;
-    private float timeBetweenInputs = 0.15f;
+    
 }

@@ -97,6 +97,7 @@ public class PlayerFSMState
 
 public class PlayerFSMStartState : PlayerFSMState
 {
+    float fTimer = 0.0f;
     public PlayerFSMStartState()
     {
         m_StateID = ePlayerFSMStateID.StartStateID;
@@ -104,6 +105,7 @@ public class PlayerFSMStartState : PlayerFSMState
 
     public override void DoBeforeEnter(PlayerController data)
     {
+        fTimer = 0.0f;
     }
 
     public override void DoBeforeLeave(PlayerController data)
@@ -113,18 +115,20 @@ public class PlayerFSMStartState : PlayerFSMState
     public override void Do(PlayerController data)
     {
         data.m_MoveMode = "Stop";
+        fTimer += Time.deltaTime;
     }
 
     public override void CheckCondition(PlayerController data)
     {
-        AnimatorStateInfo info = data.m_Animator.GetCurrentAnimatorStateInfo(0);
-        if (info.IsName("Standing"))
-        {
-            if (info.normalizedTime > 0.9f)
-            {
-                data.m_PlayerFSM.PerformTransition(ePlayerFSMTrans.Go_Gun);
-            }
-        }
+        if(fTimer > 1.0f) data.m_PlayerFSM.PerformTransition(ePlayerFSMTrans.Go_Gun);
+        //AnimatorStateInfo info = data.m_Animator.GetCurrentAnimatorStateInfo(0);
+        //if (info.IsName("Standing"))
+        //{
+        //    if (info.normalizedTime > 0.9f)
+        //    {
+        //        data.m_PlayerFSM.PerformTransition(ePlayerFSMTrans.Go_Gun);
+        //    }
+        //}
     }
 }
 
@@ -702,7 +706,7 @@ public class PlayerFSMRollState : PlayerFSMState
         AnimatorStateInfo info = data.m_PAC.Animator.GetCurrentAnimatorStateInfo(3);
         if (info.IsName("Roll"))
         {
-            if (info.normalizedTime > 0.8f)
+            if (info.normalizedTime >= 1.0f)
             {
                 data.m_Collider.enabled = true;
                 data.m_PlayerFSM.PerformPreviousTransition();

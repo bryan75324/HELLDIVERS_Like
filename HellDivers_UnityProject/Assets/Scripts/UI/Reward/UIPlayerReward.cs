@@ -71,15 +71,15 @@ namespace HELLDIVERS.UI
                     }
                 );
 
-            m_ExpBar.CanvasTween.Play();
+            m_ExpBar.CanvasTween.PlayForward();
             yield return new WaitForSeconds(m_ExpBar.CanvasTween.TimeLenght);
 
             m_ExpBar.DoEvaluate();
 
             for (int i = 0; i < m_Details.Count; i++)
             {
-                UITweenCanvasGroup tween = m_Details[i].CanvasTween;
-                tween.Play();
+                var tween = m_Details[i].CanvasTween;
+                tween.PlayForward();
                 yield return new WaitForSeconds(tween.TimeLenght);
                 m_Details[i].StartCountNum();
             }

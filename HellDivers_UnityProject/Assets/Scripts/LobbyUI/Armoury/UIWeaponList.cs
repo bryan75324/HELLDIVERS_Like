@@ -180,14 +180,15 @@ public class UIWeaponList : MonoBehaviour {
 
     private void ButtonUp()
     {
+        if (m_currentSelectObject == m_weapons[0]) return;
         DisSelectEvent(m_currentSelectObject);
         ButtonNavUP();
         OnSelectEvent(m_currentSelectObject);
-
     }
 
     private void ButtonDown()
     {
+        if (m_currentSelectObject == m_weapons[m_weapons.Count-1]) return;
         DisSelectEvent(m_currentSelectObject);
         ButtonNavDown();
         OnSelectEvent(m_currentSelectObject);
@@ -267,6 +268,7 @@ public class UIWeaponList : MonoBehaviour {
         }
         SetInfo(go);
         weaponDisplay.Button.CheckLevelUp();
+        weaponDisplay.SetPlayer.PlayAudio();
     }
 
     private void DisSelectEvent(GameObject go)

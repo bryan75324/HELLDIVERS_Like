@@ -39,6 +39,7 @@ public class WeaponController : MonoBehaviour
             component.Behaviour.WeaponLoader();
             component.Effect = SetFireEffect(weaponID, pos);
             m_dWeapon.Add(weaponID, component);
+            SetSoundID(weaponID);
             _CurrentWeapon = weaponID;
             m_player = player;
             m_tGunPos = pos;
@@ -116,10 +117,26 @@ public class WeaponController : MonoBehaviour
     private GameObject SetFireEffect(int i, Transform t)
     {
         GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(i * 10 + 1);
-        //go.GetComponent<EffectController>().SetID(i * 10 + 1);
+        go.GetComponent<EffectController>().SetID(i * 10 + 1);
         go.transform.parent = t;
         go.transform.localPosition = Vector3.zero;
         return go;
+    }
+
+    private void SetSoundID(int i)
+    {
+        List<GameObject> gos = new List<GameObject>();
+        for (int j = 0; j < 5; j++)
+        {
+            GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(i * 10 + 2);
+            if (go == null) break;
+            go.GetComponent<ClipHandler>().SetID(i * 10 + 2);
+            gos.Add(go);
+        }
+        for (int j = 0; j < gos.Count; j++)
+        {
+            ObjectPool.m_Instance.UnLoadObjectToPool(i * 10 + 2, gos[j]);
+        }
     }
 
     public void LoadSound(int i)

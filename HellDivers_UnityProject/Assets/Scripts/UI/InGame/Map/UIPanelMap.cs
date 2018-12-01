@@ -5,7 +5,16 @@ using UnityEngine.UI;
 
 public class UIPanelMap : MonoBehaviour {
 
+    [SerializeField] private UIPanelRadar m_PanelRadar;
+    [SerializeField] private UIMapPoint m_PointPrefab;
+
     public static UIPanelMap Instance { get; private set; }
+
+    #region Variable
+    [SerializeField] private float m_MapRadius = 40.0f;
+    [SerializeField] private float m_MapWidth = 544.0f;
+    [SerializeField] private float m_MapHeight = 720.0f;
+
     public float RectWidth { get { return m_RectWidth; } }
     public float RectHeight { get { return m_RectHeight; } }
     public float MapRadius { get { return m_MapRadius; } }
@@ -13,22 +22,23 @@ public class UIPanelMap : MonoBehaviour {
     public float MapHeight { get { return m_MapHeight; } }
     public Color Color { get { return m_Color; } }
     public List<GameObject> PointList { get { return m_PointList; } }
-    [SerializeField] private UIMapPoint m_PointPrefab;
+
     private RectTransform m_RectTransform;
     private float m_RectWidth;
     private float m_RectHeight;
     private Image m_Image;
     private Color m_Color;
     private List<GameObject> m_PointList = new List<GameObject>();
-
-    [SerializeField] private float m_MapRadius = 40.0f;
-    [SerializeField] private float m_MapWidth = 544.0f;
-    [SerializeField] private float m_MapHeight = 720.0f;
+    #endregion 
 
     private GameObject m_GORMapPoint;
 
     private bool m_bDisplay = false;
     private float m_Timer = 0.0f;
+
+    private Image m_RadarImage;
+    private Color m_RadarColor;
+
     // Use this for initialization
 
     public void Init()
@@ -51,7 +61,8 @@ public class UIPanelMap : MonoBehaviour {
     }
     void Start()
     {
-
+        //m_RadarImage = m_PanelRadar.GetComponent<Image>();
+        //m_RadarColor = m_RadarImage.GetComponent<Color>();
     }
 
     // Update is called once per frame

@@ -6,6 +6,7 @@ public class ControllerTesting : MonoBehaviour {
 
     [SerializeField] WelcomeButtonController buttonController;
     [SerializeField] AxisEvent axis;
+    [SerializeField] AudioSource audio;
     private ControllerSetting m_ControllerSetting1;
     private ControllerSetting m_ControllerSetting2;
 
@@ -24,17 +25,22 @@ public class ControllerTesting : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (m_Interactive) return;
+        if (m_Interactive)
+        {
+            this.gameObject.SetActive(false);
+        }
 		if (Input.GetKey(m_ControllerSetting1.Submit))
         {
             buttonController.SetController(m_ControllerSetting1);
             axis.SetController(m_ControllerSetting1);
+            audio.Play();
             m_Interactive = true;
         }
         else if(Input.GetKey(m_ControllerSetting2.Submit))
         {
             buttonController.SetController(m_ControllerSetting2);
             axis.SetController(m_ControllerSetting2);
+            audio.Play();
             m_Interactive = true;
         }
 	}

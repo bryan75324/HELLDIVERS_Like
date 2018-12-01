@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class AxisEvent : MonoBehaviour {
 
+    [SerializeField] AudioSource audio;
+
 	// Update is called once per frame
 	void FixedUpdate () {
         if (!PlayerManager.Instance.Players.ContainsKey(1) && m_controller == null) { return; }
@@ -46,6 +48,11 @@ public class AxisEvent : MonoBehaviour {
             ExecuteEvents.Execute(currentButton, currentAxis, ExecuteEvents.moveHandler);
             timer = timeBetweenInputs;
         }
+        else if (Input.GetKeyDown(controller.Submit))
+        {
+            if (audio.isPlaying) { audio.Stop(); }
+            audio.Play();
+        }
 
     }
 
@@ -54,6 +61,6 @@ public class AxisEvent : MonoBehaviour {
     private ControllerSetting m_controller;
     private AxisEventData currentAxis;
     private GameObject currentButton;
-    private float timer;
+    private float timer = 0.5f;
     private float timeBetweenInputs = 0.15f;
 }

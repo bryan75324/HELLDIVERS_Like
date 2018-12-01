@@ -5,7 +5,7 @@ using HELLDIVERS.UI.InGame;
 
 public class MissionFactory
 {
-    public Mission CreateMission(eMissionType type)
+    public Mission CreateMission(eMissionType type, Transform pos = null)
     {
         Mission mission = null;
 
@@ -18,6 +18,12 @@ public class MissionFactory
                 MissionTowerData data = ResourceManager.m_Instance.LoadData(typeof(MissionTowerData), "Mission/Settings", "MissionTowerSetting") as MissionTowerData;
                 missionTower.Initialize(data);
                 mission = missionTower;
+
+                if (pos != null)
+                {
+                    tower.transform.SetParent(pos);
+                    tower.transform.position = pos.position;
+                }
 
                 UIInGameMain.Instance.AddMissionInfo(mission);
                 UIInGameMain.Instance.AddDynamicMissionMsg(missionTower);

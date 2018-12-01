@@ -126,6 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400014}
   - component: {fileID: 9500000}
+  - component: {fileID: 114311204068718218}
   m_Layer: 0
   m_Name: GroundFissure
   m_TagString: Untagged
@@ -20882,3 +20883,14 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100014}
   m_IsPrefabParent: 1
+--- !u!114 &114311204068718218
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08ee13386146e054caf93d0068ad5349, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

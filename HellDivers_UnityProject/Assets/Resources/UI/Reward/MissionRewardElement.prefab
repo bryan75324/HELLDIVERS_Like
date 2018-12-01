@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114939846998214970}
   - component: {fileID: 114261995783243416}
   - component: {fileID: 225520597571694350}
-  - component: {fileID: 114445946992762922}
+  - component: {fileID: 114533585278566848}
   m_Layer: 5
   m_Name: MissionRewardElement
   m_TagString: Untagged
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114445946992762922
+--- !u!114 &114533585278566848
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1038522180668246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e3cb5b01e1c0a4e8b8b6df637ba347, type: 3}
+  m_Script: {fileID: 11500000, guid: dbf051c7360545140befbd8fc1c605c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_time: 1
@@ -209,14 +209,14 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

@@ -9,7 +9,7 @@ public class TankAI : Character
     public MobInfo m_AIData;
     public eFSMStateID m_CurrentState;
     private MobAnimationsController m_MobAnimator;
-    private BoxCollider m_CapsuleCollider;
+    private BoxCollider m_BodyCollider;
     private CapsuleCollider m_DamageCollider;
     private float Timer = 2.0f;
     private float fShield = 0.0f;
@@ -33,7 +33,7 @@ public class TankAI : Character
         m_AIData.m_Go = this.gameObject;
         m_bDead = false;
         m_CurrentHp = m_MaxHp;
-        m_CapsuleCollider.enabled = true;
+        m_BodyCollider.enabled = true;
         m_DamageCollider.enabled = true;
         m_FSM.PerformTransition(eFSMTransition.Go_Respawn);
         if (OnSpawn != null) OnSpawn();
@@ -47,7 +47,7 @@ public class TankAI : Character
         base.Start();
 
         m_MobAnimator = this.GetComponent<MobAnimationsController>();
-        m_CapsuleCollider = this.GetComponent<BoxCollider>();
+        m_BodyCollider = this.GetComponent<BoxCollider>();
         m_DamageCollider = GetComponentInChildren<CapsuleCollider>();
         m_FSM = new FSMSystem(m_AIData);
         m_AIData.m_Go = this.gameObject;
@@ -176,13 +176,15 @@ public class TankAI : Character
 
         GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(3002);
         BloodSpurt bloodSpurt = go.GetComponent<BloodSpurt>();
-        bloodSpurt.Init(this.gameObject, hitPoint);
-        
 
         if (m_CurrentHp <= 0)
         {
-            m_CapsuleCollider.enabled = false;
+            m_BodyCollider.enabled = false;
             m_DamageCollider.enabled = false;
+
+            go = ObjectPool.m_Instance.LoadGameObjectFromPool(3004);
+            bloodSpurt = go.GetComponent<BloodSpurt>();
+            bloodSpurt.Init(m_AIData, this.transform.position + Vector3.up);
             Death();
 
             damager.Damager.Record.NumOfKills++;
@@ -192,6 +194,7 @@ public class TankAI : Character
         }
         else
         {
+            bloodSpurt.Init(m_AIData, hitPoint);
             fShield += damager.Damage;
             if (fShield >= 300f) PerformGetHurt(hitPoint);
         }

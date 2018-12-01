@@ -15,6 +15,7 @@ public class UI_WeaponButton : MonoBehaviour {
     //public GameObject 
 
     private GameObject m_CurrentObject;
+    private AudioSource m_Audio;
     private Color m_HighLight = new Color(0.788f, 0.635f, 0.133f, 1.0f);
     private Color m_BGColor = new Color(1, 1, 1, 1);
     private Color m_NonSelectableColor = new Color(1, 1, 1, 0.286f);
@@ -22,6 +23,11 @@ public class UI_WeaponButton : MonoBehaviour {
     private Color m_tNotEnough = new Color(1, 0.18f, 0.18f, 1);
     private int mi_money;
     private bool mb_costing;
+
+    private void Start()
+    {
+        m_Audio = m_LevelUp.gameObject.GetComponent<AudioSource>();
+    }
 
     private void LateUpdate()
     {
@@ -151,6 +157,7 @@ public class UI_WeaponButton : MonoBehaviour {
             PlayerManager.Instance.Players[player].info.LevelUpWeapon(ref id);
             weaponDisplay.SetCurID(id);
             CostMoney();
+            m_Audio.Play();
             weaponDisplay.WeaponList.LevelUp(id);
             weaponDisplay.Info.SetWeaponInfo(id, type);
             if (weaponDisplay.CurWeaponID == pList[pList.Count - 1] || !CheckLevelUp())

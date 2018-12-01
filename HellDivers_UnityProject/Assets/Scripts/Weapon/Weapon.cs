@@ -150,21 +150,23 @@ public class Weapon : IWeaponBehaviour
         string m_sForderBullet = "WeaponStorage/Bullet";
         string m_sForderSound = "WeaponStorage/Sound";
 
-        Object HitMobEffect;
-        Object HitObsEffect;
-        Object HitThrough;
+        Object effect_HitMob;
+        Object effect_HitObs;
+        Object effect_HitThrough;
+        Object sound_HitObs;
         Object sound_Empty;
         Object sound_Reload;
+        Object sound;
         Object weapon;
         Object effect;
-        Object sound;
 
 
         if (ResourceManager.m_Instance != null)
         {
-            HitMobEffect = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitMob", false);
-            HitObsEffect = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitObs", false);
-            HitThrough = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitThrough", false);
+            effect_HitMob = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitMob", false);
+            effect_HitObs = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitObs", false);
+            effect_HitThrough = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderEffect, "HitThrough", false);
+            sound_HitObs = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderSound, "Sound_HitObs", false);
             sound_Empty = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderSound, "Sound_Empty", false);
             sound_Reload = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderSound, "Sound_Reload", false);
             weapon = ResourceManager.m_Instance.LoadData(typeof(GameObject), m_sForderBullet, m_sWeapon, false);
@@ -174,22 +176,25 @@ public class Weapon : IWeaponBehaviour
         else
         {
             Debug.LogWarning("No ResourceManager.");
-            HitMobEffect = Resources.Load(m_sForderEffect + "/HitMob");
-            HitObsEffect = Resources.Load(m_sForderEffect + "/HitObs");
-            HitThrough = Resources.Load(m_sForderEffect + "/HitThrough");
+            effect_HitMob = Resources.Load(m_sForderEffect + "/HitMob");
+            effect_HitObs = Resources.Load(m_sForderEffect + "/HitObs");
+            effect_HitThrough = Resources.Load(m_sForderEffect + "/HitThrough");
+            sound_HitObs = Resources.Load(m_sForderSound + "/" + "Sound_HitObs");
             sound_Empty = Resources.Load(m_sForderSound + "/" + "Sound_Empty");
             sound_Reload = Resources.Load(m_sForderSound + "/" + "Sound_Reload");
             weapon = Resources.Load(m_sForderBullet + "/" + m_sWeapon);
             effect = Resources.Load(m_sForderEffect + "/" + m_sEffect);
             sound = Resources.Load(m_sForderSound + "/" + m_sSound);
         }
+
         if (ObjectPool.m_Instance == null) ObjectPool.m_Instance.Init();
-        ObjectPool.m_Instance.InitGameObjects(HitMobEffect, activeAmmo * 2, 10);
-        ObjectPool.m_Instance.InitGameObjects(HitObsEffect, activeAmmo * 2, 20);
-        ObjectPool.m_Instance.InitGameObjects(HitThrough, activeAmmo * 2, 30);
+        ObjectPool.m_Instance.InitGameObjects(effect_HitMob, activeAmmo * 2, 10);
+        ObjectPool.m_Instance.InitGameObjects(effect_HitObs, activeAmmo * 2, 20);
+        ObjectPool.m_Instance.InitGameObjects(effect_HitThrough, activeAmmo * 2, 30);
         ObjectPool.m_Instance.InitGameObjects(weapon, activeAmmo, _weaponInfo.ID);
-        ObjectPool.m_Instance.InitGameObjects(effect, activeAmmo, _weaponInfo.ID * 10 + 1);
-        ObjectPool.m_Instance.InitGameObjects(sound, activeAmmo, _weaponInfo.ID * 10 + 2);
+        ObjectPool.m_Instance.InitGameObjects(effect, 3, _weaponInfo.ID * 10 + 1);
+        ObjectPool.m_Instance.InitGameObjects(sound, 3, _weaponInfo.ID * 10 + 2);
+        ObjectPool.m_Instance.InitGameObjects(sound_HitObs, 1, 997);
         ObjectPool.m_Instance.InitGameObjects(sound_Reload, 1, 998);
         ObjectPool.m_Instance.InitGameObjects(sound_Empty, 1, 999);
     }

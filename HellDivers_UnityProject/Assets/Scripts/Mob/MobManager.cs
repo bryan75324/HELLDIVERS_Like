@@ -45,7 +45,10 @@ public class MobManager
     private GameObject m_GOSpwanEffect;
     private GameObject m_GOBloodSpurtBig;
     private GameObject m_GOBloodSpurtSmall;
+    private GameObject m_GOBloodSpurtDead;
     private GameObject m_GOGroundFissure;
+    private GameObject m_GOFireBall;
+    private GameObject m_GOFireBomb;
 
 
     //private Player m_Player;
@@ -64,10 +67,13 @@ public class MobManager
         m_GOTank = Resources.Load("Mobs/Tank/Tank") as GameObject;
         m_GOBullet = Resources.Load("Mobs/Patrol/PatrolBullet") as GameObject;
         m_GOGroundFissure = Resources.Load("Mobs/Tank/GroundFissure") as GameObject;
+        m_GOFireBall = Resources.Load("Mobs/Tank/FireBall") as GameObject;
+        m_GOFireBomb = Resources.Load("Mobs/Tank/FireBomb") as GameObject;
         m_GOWarning = Resources.Load("Mobs/Effect/EnemyAlert") as GameObject;
         m_GOSpwanEffect = Resources.Load("Mobs/Effect/SpawnEffect") as GameObject;
         m_GOBloodSpurtBig = Resources.Load("Mobs/Effect/BloodGushFX/BloodSpurtBig") as GameObject;
         m_GOBloodSpurtSmall = Resources.Load("Mobs/Effect/BloodGushFX/BloodSpurtSmall") as GameObject;
+        m_GOBloodSpurtDead = Resources.Load("Mobs/Effect/BloodGushFX/BloodSpurtDead") as GameObject;
 
 
         ObjectPool.m_Instance.InitGameObjects(m_GOFish, 40, 3100);
@@ -75,11 +81,14 @@ public class MobManager
         ObjectPool.m_Instance.InitGameObjects(m_GOPatrol, 50, 3200);
         ObjectPool.m_Instance.InitGameObjects(m_GOTank, 10, 3400);
         ObjectPool.m_Instance.InitGameObjects(m_GOGroundFissure, 10, 3401);
+        ObjectPool.m_Instance.InitGameObjects(m_GOFireBall, 10, 3402);
+        ObjectPool.m_Instance.InitGameObjects(m_GOFireBomb, 10, 3403);
         ObjectPool.m_Instance.InitGameObjects(m_GOBullet, 40, 3201);
         ObjectPool.m_Instance.InitGameObjects(m_GOWarning, 5, 3210);
         ObjectPool.m_Instance.InitGameObjects(m_GOSpwanEffect, 30, 3001);
         ObjectPool.m_Instance.InitGameObjects(m_GOBloodSpurtBig, 300, 3002);
         ObjectPool.m_Instance.InitGameObjects(m_GOBloodSpurtSmall, 300, 3003);
+        ObjectPool.m_Instance.InitGameObjects(m_GOBloodSpurtDead, 300, 3004);
         m_TotalKill = 0;
         m_TotalFishKill = 0;
         m_TotalPatrolKill = 0;
@@ -143,8 +152,6 @@ public class MobManager
 
     public void SpawnMobs(int fishCount, int fishVariantCount, int patrolCount, int tankCount)
     {
-        Debug.Log("Fish:"+ m_FishCount + " Fish2:" + m_FishVariantCount + " Patrol:" + m_PatrolCount + " Tank:" + m_TankCount);
-       
         List<Player> pList = InGamePlayerManager.Instance.Players;
         Vector3 Center = new Vector3();
         Center.Set(0, 0, 0);
@@ -217,6 +224,7 @@ public class MobManager
                 break;
             }
         }
+        Debug.Log("Fish:" + m_FishCount + " Fish2:" + m_FishVariantCount + " Patrol:" + m_PatrolCount + " Tank:" + m_TankCount);
     }
 
     public void SpawnMobs(int fishCount, int fishVariantCount, int patrolCount, int tankCount, Transform center, float minRadius, float maxRadius)
@@ -350,9 +358,9 @@ public class MobManager
                 break;
         }
     }
+
     public void AddTotalKill()
     {
-        m_TotalTankKill++;
         if (OnKill != null) OnKill();
     }
 }
