@@ -6,12 +6,11 @@ public enum eMissionType
 {
     Tower,
     KillMob,
-    Escape,
 }
 
 public enum eMissionPriority
 {
-    Main, Escape, Side
+    Main, Side
 }
 
 [System.Serializable]

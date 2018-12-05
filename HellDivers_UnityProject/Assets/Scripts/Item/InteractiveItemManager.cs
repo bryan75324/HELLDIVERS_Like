@@ -9,11 +9,8 @@ public class InteractiveItemManager
 
     public void Init()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            m_ItemMap = new Dictionary<string, List<IInteractable>>();
-        }
+        Instance = this;
+        m_ItemMap = new Dictionary<string, List<IInteractable>>();
     }
 
     public void AddItem(IInteractable item)
@@ -38,10 +35,15 @@ public class InteractiveItemManager
         }
     }
 
-    public void OnInteractive(Player player)
+    public bool OnInteractive(Player player)
     {
         IInteractable nearestItem = GetNearestItem(player.transform.position);
-        if (nearestItem != null) nearestItem.OnInteract(player);
+        if (nearestItem != null)
+        {
+            nearestItem.OnInteract(player);
+            return true;
+        }
+        return false;
     }
 
     private IInteractable GetNearestItem(Vector3 position)

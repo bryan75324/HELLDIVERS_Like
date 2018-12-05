@@ -90,7 +90,8 @@ public class ObjectPool
     private void SetParent(int type, GameObject go)
     {
         GameObject parent;
-        int i = (int)(type * 0.001f);
+        char c = type.ToString()[0];
+        int i = int.Parse(c.ToString());
         switch (i)
         {
             case 1:

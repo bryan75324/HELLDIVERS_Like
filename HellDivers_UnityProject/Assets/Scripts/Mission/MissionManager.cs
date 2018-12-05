@@ -11,10 +11,24 @@ public class MissionManager
 
     private MissionFactory m_Factory = new MissionFactory();
     private Dictionary<eMissionPriority, List<Mission>> m_Missions = new Dictionary<eMissionPriority, List<Mission>>();
+    private List<Transform> m_TowerPositions;
 
     public void Init()
     {
-        if (Instance == null) Instance = this;
+        Instance = this;
+
+        if (MapInfo.Instance.TowerPos != null && MapInfo.Instance.TowerPos.Count > 0)
+        {
+            var MapTowerPositions = MapInfo.Instance.TowerPos;
+            Transform[] towerPositions = new Transform[MapTowerPositions.Count];
+            MapInfo.Instance.TowerPos.CopyTo(towerPositions);
+
+            m_TowerPositions = new List<Transform>();
+            foreach (var t in towerPositions)
+            {
+                m_TowerPositions.Add(t);
+            }
+        }
     }
 
     public void StartAllMission()
@@ -28,29 +42,22 @@ public class MissionManager
         }
     }
 
-    public void CreateTowerMissions(uint num)
+    public void CreateTowerMissions(uint num, uint level = 0)
     {
-        if (MapInfo.Instance == null) return;
+        if (m_TowerPositions == null || m_TowerPositions.Count < 0) return;
 
-        List<Transform> towerPositions = new List<Transform>();
-        for (int i = 0; i < MapInfo.Instance.TowerPos.Count; i++)
-        {
-            towerPositions.Add(MapInfo.Instance.TowerPos[i]);
-        }
-
-        num = (num > towerPositions.Count) ? (uint)towerPositions.Count : num;
-
+        num = (num > m_TowerPositions.Count) ? (uint)m_TowerPositions.Count : num;
         for (int i = 0; i < num; i++)
         {
-            int index = Random.Range(0, towerPositions.Count - 1);
-            CreateMission(eMissionType.Tower, towerPositions[index]);
-            towerPositions.RemoveAt(index);
+            int index = Random.Range(0, m_TowerPositions.Count - 1);
+            CreateMission(eMissionType.Tower, m_TowerPositions[index], level);
+            m_TowerPositions.RemoveAt(index);
         }
     }
 
-    public void CreateMission(eMissionType type, Transform pos = null)
+    public void CreateMission(eMissionType type, Transform pos = null, uint level = 0)
     {
-        Mission mission = m_Factory.CreateMission(type, pos);
+        Mission mission = m_Factory.CreateMission(type, pos, level);
 
         List<Mission> pList;
         if (m_Missions.ContainsKey(mission.Priority))

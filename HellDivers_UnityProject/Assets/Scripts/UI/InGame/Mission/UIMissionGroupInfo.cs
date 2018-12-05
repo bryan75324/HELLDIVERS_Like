@@ -8,6 +8,8 @@ namespace HELLDIVERS.UI.InGame
 {
     public class UIMissionGroupInfo : UIMissionInfo
     {
+        public event UIEventHolder OnFinished;
+
         protected LinkedList<Mission> m_Missions = new LinkedList<Mission>();
 
         protected override void OnInitialized(Mission mission)
@@ -44,6 +46,7 @@ namespace HELLDIVERS.UI.InGame
             {
                 if (mission.IsFinished) completeCount++;
             }
+
             m_Count.text = string.Format("( {0} / {1} )", completeCount, m_Missions.Count); ;
 
             if (completeCount == m_Missions.Count)
@@ -51,6 +54,7 @@ namespace HELLDIVERS.UI.InGame
                 m_CheckMark.gameObject.SetActive(true);
                 m_Description.color = UIHelper.Player1_Color;
                 m_Count.color = UIHelper.Player1_Color;
+                if (OnFinished != null) OnFinished();
             }
         }
 

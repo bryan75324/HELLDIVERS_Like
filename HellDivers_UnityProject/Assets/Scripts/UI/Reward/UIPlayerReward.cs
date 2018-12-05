@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace HELLDIVERS.UI
 {
+    [RequireComponent(typeof(SoundManager))]
     public class UIPlayerReward : MonoBehaviour
     {
         public PlayerInfo CurrentPlayerInfo { get { return currentPlayer; } }
@@ -15,6 +16,7 @@ namespace HELLDIVERS.UI
         private PlayerInfo currentPlayer;
         private PlayerRecord currentRecord;
         private Animator m_Animator;
+        private SoundManager m_SoundManager;
         [SerializeField] private Image m_Header;
         [SerializeField] private Image m_RankIcon;
         [SerializeField] private Text m_RankText;
@@ -22,6 +24,14 @@ namespace HELLDIVERS.UI
         [SerializeField] private UIPlayerRewardExpBar m_ExpBar;
         [SerializeField] private UIPlayerRewardDetail m_RewardDetailPrefab;
         private List<UIPlayerRewardDetail> m_Details = new List<UIPlayerRewardDetail>();
+
+        private void Awake()
+        {
+            m_Animator = this.GetComponent<Animator>();
+            m_SoundManager = this.GetComponent<SoundManager>();
+            SoundDataSetting soundData = Resources.Load("Sounds/Reward/ExpBar_SoundDataSetting") as SoundDataSetting;
+            m_SoundManager.SetAudioClips(soundData.SoundDatas);
+        }
 
         public void Initialize(PlayerInfo player, PlayerRecord record, MissionReward missionReward, int serialNumber = 1)
         {
@@ -37,8 +47,8 @@ namespace HELLDIVERS.UI
             RefreshRankIcon(currentPlayer.Rank);
 
             m_ExpBar = Instantiate(m_ExpBar, this.transform);
-            m_ExpBar.OnRankUpdate += RefreshRankInfo;
             m_ExpBar.Initialize(currentPlayer.Exp, currentPlayer.Exp + record.Exp + missionReward.EXP, currentPlayer.Rank);
+            m_ExpBar.OnRankUpdate += RefreshRankInfo;
 
             CreateDetail("DEATH", currentRecord.TimesOfDeath);
             CreateDetail("KILLS", currentRecord.NumOfKills);
@@ -89,6 +99,7 @@ namespace HELLDIVERS.UI
 
         private void RefreshRankInfo()
         {
+            m_SoundManager.PlayOnce(1);
             RefreshRankIcon(m_ExpBar.CurrentRank);
             m_RankText.text = m_ExpBar.CurrentRank.ToString();
         }
@@ -97,11 +108,6 @@ namespace HELLDIVERS.UI
         {
             string fileName = string.Format("icon_rank_{0}", rank.ToString("00"));
             m_RankIcon.sprite = ResourceManager.m_Instance.LoadSprite(typeof(Sprite), UIHelper.RankIconFolder, fileName);
-        }
-
-        private void Awake()
-        {
-            m_Animator = this.GetComponent<Animator>();
         }
 
         private void OnDestroy()

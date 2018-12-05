@@ -5,19 +5,23 @@ using UnityEngine.UI;
 
 namespace HELLDIVERS.UI
 {
+    [RequireComponent(typeof(SoundManager))]
     [RequireComponent(typeof(UITweenCanvasAlpha))]
     public class UIPlayerRewardExpBar : MonoBehaviour
     {
         public UITweenCanvasAlpha CanvasTween { get { return m_CanvasTween; } }
         public int CurrentRank { get { return m_CurrentRank.Rank; } }
 
-        public delegate void ExpBarEventHolder();
+        public event UIEventHolder OnEvluateStart;
 
-        public event ExpBarEventHolder OnRankUpdate;
+        public event UIEventHolder OnEvluateStop;
+
+        public event UIEventHolder OnRankUpdate;
 
         [SerializeField] private Text m_textExp;
         [SerializeField] private Image m_imgFill;
         private UITweenCanvasAlpha m_CanvasTween;
+        private SoundManager m_SoundManager;
         private int m_CurrentExp;
         private int m_TargetExp;
         private RankData m_CurrentRank;
@@ -28,7 +32,6 @@ namespace HELLDIVERS.UI
         {
             m_CurrentExp = startAmount;
             m_TargetExp = targetAmount;
-
             m_CurrentRank = GameData.Instance.RankTable[startrank];
             m_NextRank = GameData.Instance.RankTable[m_CurrentRank.Rank + 1];
 
@@ -38,24 +41,36 @@ namespace HELLDIVERS.UI
 
         public void DoEvaluate()
         {
+            if (OnEvluateStart != null) OnEvluateStart();
             StartCoroutine(EvaluateExpToTarget());
         }
 
         private void Awake()
         {
             m_CanvasTween = this.GetComponent<UITweenCanvasAlpha>();
+            m_SoundManager = this.GetComponent<SoundManager>();
+            SoundDataSetting soundData = Resources.Load("Sounds/Reward/ExpBar_SoundDataSetting") as SoundDataSetting;
+            m_SoundManager.SetAudioClips(soundData.SoundDatas);
         }
 
         private IEnumerator EvaluateExpToTarget()
         {
+            m_SoundManager.PlayLoop(0);
+
             while (m_CurrentExp < m_TargetExp)
             {
                 RefreshRankData();
                 RefreshBar();
                 m_CurrentExp += Mathf.FloorToInt(m_EvaluateAmount);
-                if (m_CurrentExp > m_TargetExp) m_CurrentExp = m_TargetExp;
+                if (m_CurrentExp > m_TargetExp) break;
                 yield return null;
             }
+            m_CurrentExp = m_TargetExp;
+            RefreshRankData();
+            RefreshBar();
+
+            m_SoundManager.Stop();
+            if (OnEvluateStop != null) OnEvluateStop();
         }
 
         private void RefreshRankData()

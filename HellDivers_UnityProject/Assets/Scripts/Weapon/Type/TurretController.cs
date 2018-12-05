@@ -12,13 +12,15 @@ public class TurretController : Character {
 
     private GameObject m_CurrentTarget;
     Collider[] targets;
-    float m_fTimer = .4f;
+    float m_fTimer;
+    float m_fRestTimer = .1f;
 
 
     private void OnEnable()
     {
         m_MaxHp = 1000;
         m_CurrentHp = m_MaxHp;
+        if (m_weaponController != null) return;
         m_weaponController = GetComponent<WeaponController>();
         m_weaponController.AddWeapon(1901, m_GunPos, null);
     }
@@ -32,7 +34,7 @@ public class TurretController : Character {
             m_fTimer -= Time.fixedDeltaTime;
             return;
         }
-        else if (!Attack()) { m_fTimer = .4f; }
+        else if (!Attack()) { m_fTimer = m_fRestTimer; }
         else {
             CheckTargetDead();
             if (!Turning()) return;
@@ -56,6 +58,7 @@ public class TurretController : Character {
             float nextDot = -1;
             for (int i = 0; i < targets.Length; i++)
             {
+                if (Physics.Linecast(m_GunPos.position, targets[i].transform.position, 1 << LayerMask.NameToLayer("Obstcale"))) continue;
                 Vector3 targetVec = targets[i].transform.position - this.transform.position;
                 Vector3 normalVec = targetVec.normalized;
                 float dot = Vector3.Dot(normalVec, this.transform.forward);
@@ -91,12 +94,23 @@ public class TurretController : Character {
     private void CheckTargetDead()
     {
         IDamageable target = m_CurrentTarget.GetComponent<IDamageable>();
-        if (target.IsDead) m_CurrentTarget = null;
+        if (target.IsDead)
+        {
+            m_CurrentTarget = null;
+            return;
+        }
+
+        if (Physics.Linecast(m_GunPos.position, m_CurrentTarget.transform.position, 1 << LayerMask.NameToLayer("Obstcale")))
+        {
+            m_CurrentTarget = null;
+            return;
+        }
     }
 
     public override void Death()
     {
+
         m_bDead = true;
-        Destroy(m_Base);
+        ObjectPool.m_Instance.UnLoadObjectToPool(2103, m_Base);
     }
 }

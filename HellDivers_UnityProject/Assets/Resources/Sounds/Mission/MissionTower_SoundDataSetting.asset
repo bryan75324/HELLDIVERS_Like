@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede7f0d4920f77e428f8f618c82ddf5b, type: 3}
+  m_Name: MissionTower_SoundDataSetting
+  m_EditorClassIdentifier: 
+  m_SoundDatas:
+  - Id: 0
+    audioClip: {fileID: 8300000, guid: 8ea34544df9dfed46a4e99c6163454e2, type: 3}
+    volumeScale: 0.5
+  - Id: 1
+    audioClip: {fileID: 8300000, guid: 4e3006acc9385eb439022ff29c065c73, type: 3}
+    volumeScale: 1
+  - Id: 2
+    audioClip: {fileID: 8300000, guid: 147926aaf58c56549aca3a88735416f5, type: 3}
+    volumeScale: 0.5
+  - Id: 3
+    audioClip: {fileID: 8300000, guid: 0a389fcdc3419cb488a1ab1a2c61c5f2, type: 3}
+    volumeScale: 0.5
+  - Id: 4
+    audioClip: {fileID: 8300000, guid: 367a74a35f84b23429fd691113892727, type: 3}
+    volumeScale: 0.1

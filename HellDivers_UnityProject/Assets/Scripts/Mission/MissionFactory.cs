@@ -5,7 +5,7 @@ using HELLDIVERS.UI.InGame;
 
 public class MissionFactory
 {
-    public Mission CreateMission(eMissionType type, Transform pos = null)
+    public Mission CreateMission(eMissionType type, Transform pos = null, uint level = 0)
     {
         Mission mission = null;
 
@@ -14,8 +14,8 @@ public class MissionFactory
             case eMissionType.Tower:
                 GameObject tower = new GameObject("MissionTower");
                 MissionTower missionTower = tower.AddComponent<MissionTower>();
-
-                MissionTowerData data = ResourceManager.m_Instance.LoadData(typeof(MissionTowerData), "Mission/Settings", "MissionTowerSetting") as MissionTowerData;
+                string towerDataFileName = string.Format("MissionTowerSetting_{0}", level);
+                MissionTowerData data = ResourceManager.m_Instance.LoadData(typeof(MissionTowerData), "Mission/Settings", towerDataFileName) as MissionTowerData;
                 missionTower.Initialize(data);
                 mission = missionTower;
 
@@ -33,8 +33,8 @@ public class MissionFactory
             case eMissionType.KillMob:
                 GameObject killMob = new GameObject("MissionKillMob");
                 MissionKillMob missionKill = killMob.AddComponent<MissionKillMob>();
-
-                MissionKillMobData killData = ResourceManager.m_Instance.LoadData(typeof(MissionKillMobData), "Mission/Settings", "MissionKillMobSetting") as MissionKillMobData;
+                string killMobDataFileName = string.Format("MissionKillMobSetting_{0}", level);
+                MissionKillMobData killData = ResourceManager.m_Instance.LoadData(typeof(MissionKillMobData), "Mission/Settings", killMobDataFileName) as MissionKillMobData;
                 missionKill.Initialize(killData);
                 mission = missionKill;
 

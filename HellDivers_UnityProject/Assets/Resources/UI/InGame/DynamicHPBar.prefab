@@ -95,7 +95,7 @@ MonoBehaviour:
   m_NameText: {fileID: 114333603044790168}
   m_BarBg: {fileID: 114189375135156876}
   m_BarFill: {fileID: 114543181973413664}
-  m_Position: {x: 0, y: 125}
+  m_Position: {x: 0, y: -58}
 --- !u!114 &114189375135156876
 MonoBehaviour:
   m_ObjectHideFlags: 1

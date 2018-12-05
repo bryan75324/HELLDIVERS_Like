@@ -19,24 +19,27 @@ public class UI_WeaponInfo : MonoBehaviour {
         m_iType = type; 
         SetUI(m_iCurrentID);
         Get_Power(out cur, out next, out max);
-        m_Power.SetAbility(m_Power.name, GetLength(cur, max), GetLength(next, max));
+        m_Power.SetAbility(m_Power.name, GetLength(cur, max), GetLength(next, max), cur.ToString(), "dmg");
 
         Get_Magazine(out cur, out next, out max);
-        m_Magazine.SetAbility(m_Magazine.name, GetLength(cur, max), GetLength(next, max));
+        m_Magazine.SetAbility(m_Magazine.name, GetLength(cur, max), GetLength(next, max), cur.ToString(), "mags");
 
         Get_FireRate(out cur, out next, out max);
-        m_FireRate.SetAbility(m_FireRate.name, GetLength(cur, max), GetLength(next, max));
+        m_FireRate.SetAbility(m_FireRate.name, GetLength(cur, max), GetLength(next, max), cur.ToString(), "RPM");
 
         Get_Range(out cur, out next, out max);
-        m_Range.SetAbility(m_Range.name, GetLength(cur, max), GetLength(next, max));
+        m_Range.SetAbility(m_Range.name, GetLength(cur, max), GetLength(next, max), cur.ToString(), "m");
 
         Get_Stability(out cur, out next, out max);
-        m_Stability.SetAbility(m_Stability.name, GetLength(max, cur), GetLength(max, next));
+        m_Stability.SetAbility(m_Stability.name, GetLength(max, cur), GetLength(max, next), cur.ToString(), "degree");
 
         Get_FireMode(out mode);
         m_FireMode.SetWord(m_FireMode.name, mode);
 
-        m_Cost.text = m_tCost + GameData.Instance.WeaponInfoTable[id].Cost.ToString();
+        string s = "";
+        if (GameData.Instance.WeaponInfoTable[id].Cost == 0) s = "Max Level";
+        else  s = m_tCost + GameData.Instance.WeaponInfoTable[id].Cost.ToString();
+        m_Cost.text = s;
     }
     
     private void Awake()
@@ -49,6 +52,7 @@ public class UI_WeaponInfo : MonoBehaviour {
         CreateObject(ref m_Stability, "Stability");
         CreateObject(ref m_FireMode, "FireMode");
     }
+
 
     #region UIWeaponAbility Field
     UIWeaponAbility m_Power;
@@ -72,6 +76,20 @@ public class UI_WeaponInfo : MonoBehaviour {
         }
         else { max = next = cur; }
     }
+
+    private void Get_Magazine(out float cur, out float next, out float max)
+    {
+        List<int> pList = weapons[m_iType];
+        int MaxLevel = pList[pList.Count - 1];
+        cur = GameData.Instance.WeaponInfoTable[m_iCurrentID].Max_Mags;
+        if (m_iCurrentID != MaxLevel)
+        {
+            max = GameData.Instance.WeaponInfoTable[MaxLevel].Max_Mags;
+            next = GameData.Instance.WeaponInfoTable[m_iCurrentID + 1].Max_Mags;
+        }
+        else { max = next = cur; }
+    }
+
     private void Get_FireRate(out float cur, out float next, out float max)
     {
         List<int> pList = weapons[m_iType];
@@ -84,6 +102,20 @@ public class UI_WeaponInfo : MonoBehaviour {
         }
         else { max = next = cur; }
     }
+
+    private void Get_Range(out float cur, out float next, out float max)
+    {
+        List<int> pList = weapons[m_iType];
+        int MaxLevel = pList[pList.Count - 1];
+        cur = GameData.Instance.WeaponInfoTable[m_iCurrentID].Range;
+        if (m_iCurrentID != MaxLevel)
+        {
+            max = GameData.Instance.WeaponInfoTable[MaxLevel].Range;
+            next = GameData.Instance.WeaponInfoTable[m_iCurrentID + 1].Range;
+        }
+        else { max = next = cur; }
+    }
+
     private void Get_Stability(out float cur, out float next, out float max)
     {
         List<int> pList = weapons[m_iType];
@@ -102,30 +134,7 @@ public class UI_WeaponInfo : MonoBehaviour {
         }
         else { max = next = cur; }
     }
-    private void Get_Magazine(out float cur, out float next, out float max)
-    {
-        List<int> pList = weapons[m_iType];
-        int MaxLevel = pList[pList.Count - 1];
-        cur = GameData.Instance.WeaponInfoTable[m_iCurrentID].Max_Mags;
-        if (m_iCurrentID != MaxLevel)
-        {
-            max = GameData.Instance.WeaponInfoTable[MaxLevel].Max_Mags;
-            next = GameData.Instance.WeaponInfoTable[m_iCurrentID + 1].Max_Mags;
-        }
-        else { max = next = cur; }
-    }
-    private void Get_Range(out float cur, out float next, out float max)
-    {
-        List<int> pList = weapons[m_iType];
-        int MaxLevel = pList[pList.Count - 1];
-        cur = GameData.Instance.WeaponInfoTable[m_iCurrentID].Range;
-        if (m_iCurrentID != MaxLevel)
-        {
-            max = GameData.Instance.WeaponInfoTable[MaxLevel].Range;
-            next = GameData.Instance.WeaponInfoTable[m_iCurrentID + 1].Range;
-        }
-        else { max = next = cur; }
-    }
+
     private void Get_FireMode(out string mode)
     {
         float i = GameData.Instance.WeaponInfoTable[m_iCurrentID].FireMode;
@@ -173,7 +182,7 @@ public class UI_WeaponInfo : MonoBehaviour {
     private float GetLength(float target, float max)
     {
         if (max == 0 && target == 0) max = target = 1;
-        float length = (target / max) * 200;
+        float length = (target / max) * 150;
         return length;
     }
 

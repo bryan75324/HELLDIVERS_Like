@@ -103,6 +103,7 @@ namespace HELLDIVERS.UI.InGame
 
         private void RefreshCodeImg()
         {
+            Color lightColor = (CurrentTower.CurrentPlayer != null) ? UIHelper.GetPlayerColor(CurrentTower.CurrentPlayer.SerialNumber) : m_BrightColor;
             m_textMessage.text = "Input password";
             m_arrowRoot.gameObject.SetActive(CurrentTower.CodeMechine.IsChecking);
             if (CurrentTower.CodeMechine.IsChecking)
@@ -114,7 +115,7 @@ namespace HELLDIVERS.UI.InGame
 
                 for (int i = 0; i < CurrentTower.CodeMechine.Step; i++)
                 {
-                    m_Arrows[i].color = m_BrightColor;
+                    m_Arrows[i].color = lightColor;
                 }
             }
         }

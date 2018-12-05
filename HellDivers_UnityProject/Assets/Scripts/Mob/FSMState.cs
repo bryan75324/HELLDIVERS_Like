@@ -288,6 +288,11 @@ public class FSMMoveToState : FSMState
         SteeringBehaviours.NavMove(data);
         Vector3 v = (SteeringBehaviours.GroupBehavior(data, 20, true) + SteeringBehaviours.GroupBehavior(data, 20, false)) * 2f * Time.deltaTime;
         data.m_Go.transform.position += v;
+        if(data.m_ID == 3400)
+        {
+            v = (SteeringBehaviours.GroupBehavior(data, 60, true) + SteeringBehaviours.GroupBehavior(data, 60, false)) * 2f * Time.deltaTime;
+            data.m_Go.transform.position += v;
+        }
     }
 
     public override void CheckCondition(MobInfo data)
@@ -333,6 +338,11 @@ public class FSMChaseState : FSMState
         SteeringBehaviours.NavMove(data);
         Vector3 v = (SteeringBehaviours.GroupBehavior(data, 20, true) + SteeringBehaviours.GroupBehavior(data, 20, false)) * 2f * Time.deltaTime;
         data.m_Go.transform.position += v;
+        if(data.m_ID == 3400)
+        {
+            v = (SteeringBehaviours.GroupBehavior(data, 20, true) + SteeringBehaviours.GroupBehavior(data, 20, false)) * 2f * Time.deltaTime;
+            data.m_Go.transform.position += v;
+        }
     }
 
     public override void CheckCondition(MobInfo data)
@@ -353,6 +363,7 @@ public class FSMChaseState : FSMState
 
 public class FSMChaseToRemoteAttackState : FSMState
 {
+    float m_Timer;
     public FSMChaseToRemoteAttackState()
     {
         m_StateID = eFSMStateID.ChaseToRemoteAttackStateID;
@@ -373,7 +384,7 @@ public class FSMChaseToRemoteAttackState : FSMState
         data.navMeshAgent.enabled = true;
         data.m_vTarget = data.m_Player.transform.position;
         SteeringBehaviours.NavMove(data);
-        Vector3 v = (SteeringBehaviours.GroupBehavior(data, 20, true) + SteeringBehaviours.GroupBehavior(data, 20, false)) * 2f * Time.deltaTime;
+        Vector3 v = (SteeringBehaviours.GroupBehavior(data, 60, true) + SteeringBehaviours.GroupBehavior(data, 60, false)) * 2f * Time.deltaTime;
         data.m_Go.transform.position += v;
     }
 
@@ -411,7 +422,7 @@ public class FSMChaseToMeleeAttackState : FSMState
         data.navMeshAgent.enabled = true;
         data.m_vTarget = data.m_Player.transform.position;
         SteeringBehaviours.NavMove(data);
-        Vector3 v = (SteeringBehaviours.GroupBehavior(data, 20, true) + SteeringBehaviours.GroupBehavior(data, 20, false)) * 2f * Time.deltaTime;
+        Vector3 v = (SteeringBehaviours.GroupBehavior(data, 60, true) + SteeringBehaviours.GroupBehavior(data, 60, false)) * 2f * Time.deltaTime;
         data.m_Go.transform.position += v;
     }
 
@@ -486,11 +497,21 @@ public class FSMAttackState : FSMState
         if (Vector3.Angle(vDir, data.m_Go.transform.forward) <= 10.0f && count < 1)
         {
             data.m_AnimationController.SetAnimator(m_StateID);
+            if(data.m_ID != 3400)
+            {
+                data.m_SoundManager.PlayInWorld(3900, data.m_Go.transform.position, 0.5f);
+            }
             count++;
         }
 
         Vector3 v = (SteeringBehaviours.GroupBehavior(data, 10, true) + SteeringBehaviours.GroupBehavior(data, 10, false)) * 2f * Time.deltaTime;
         data.m_Go.transform.position += v;
+
+        if(data.m_ID == 3400)
+        {
+            v = (SteeringBehaviours.GroupBehavior(data, 50, true) + SteeringBehaviours.GroupBehavior(data, 50, false)) * 2f * Time.deltaTime;
+            data.m_Go.transform.position += v;
+        }
 
         AnimatorStateInfo info = data.m_AnimationController.Animator.GetCurrentAnimatorStateInfo(0);
         if (info.IsName("Attack"))
@@ -519,6 +540,7 @@ public class FSMAttackState : FSMState
                 pos.y += 0.2f;
                 groundFissure.transform.position = pos;
                 groundFissure.SetActive(true);
+                data.m_SoundManager.PlayInWorld(3900, data.m_Go.transform.position, 0.5f);
                 effectCount++;
             }
             if (info.normalizedTime > 0.5f && attackCount < 1)
@@ -530,7 +552,7 @@ public class FSMAttackState : FSMState
                     {
                         if (pList[i].IsDead) continue;
                         float Dist = (pList[i].transform.position - data.m_Go.transform.position).magnitude;
-                        if (Dist <= data.m_fAttackRange + 0.5f) DoDamage(data);
+                        if (Dist <= data.m_fAttackRange + 2f) DoDamage(data);
                     }
                 }
                 attackCount++;
@@ -608,6 +630,7 @@ public class FSMPatrolAttackState : FSMState
             if (m_fCurrentTime >= 1.0f)
             {
                 data.m_AnimationController.SetAnimator(m_StateID);
+                data.m_SoundManager.PlayInWorld(3900, data.m_Go.transform.position, 0.5f);
                 Count++;
                 m_fCurrentTime = 0;
             }
@@ -1155,6 +1178,7 @@ public class FSMCallArmyState : FSMState
     {
         count = 0;
         data.m_AnimationController.SetAnimator(m_StateID);
+        data.m_SoundManager.PlayInWorld(3901, data.m_Go.transform.position, 0.5f);
     }
 
     public override void DoBeforeLeave(MobInfo data)
@@ -1200,6 +1224,7 @@ public class FSMFleeState : FSMState
     Animator m_Animator;
     Vector3 vec;
     GameObject GO;
+    SoundManager sound;
     public FSMFleeState()
     {
         m_StateID = eFSMStateID.FleeStateID;
@@ -1217,6 +1242,8 @@ public class FSMFleeState : FSMState
         data.m_GOEffectWarning = GO;
         m_Animator = GO.GetComponent<Animator>();
         m_Animator.SetTrigger("startTrigger");
+        sound = data.m_SoundManager.PlayLoopInWorld(3902,data.m_Go.transform.position);
+        sound.gameObject.transform.SetParent(data.m_Go.transform);
     }
 
     public override void DoBeforeLeave(MobInfo data)
@@ -1224,6 +1251,7 @@ public class FSMFleeState : FSMState
         data.navMeshAgent.speed *= 0.5f;
         data.m_AnimationController.SetAnimator(m_StateID, false);
         m_Animator.SetTrigger("endTrigger");
+        GameObject.Destroy(sound.gameObject);
         ObjectPool.m_Instance.UnLoadObjectToPool(3210, GO);
 
     }
@@ -1292,7 +1320,6 @@ public class FSMDodgeState : FSMState
 
 public class FSMDeadState : FSMState
 {
-    bool bUnload = false;
     public FSMDeadState()
     {
         m_StateID = eFSMStateID.DeadStateID;
@@ -1301,7 +1328,7 @@ public class FSMDeadState : FSMState
 
     public override void DoBeforeEnter(MobInfo data)
     {
-        bUnload = false;
+        MobManager.m_Instance.Dead();
         data.navMeshAgent.enabled = false;
         data.m_AnimationController.SetAnimator(m_StateID);
     }
@@ -1313,16 +1340,7 @@ public class FSMDeadState : FSMState
 
     public override void Do(MobInfo data)
     {
-        if (bUnload) return;
 
-        AnimatorStateInfo info = data.m_AnimationController.Animator.GetCurrentAnimatorStateInfo(0);
-        if (info.IsName("Dead"))
-        {
-            if (info.normalizedTime < 0.2f)
-            {
-                //data.m_Go.transform.position += data.m_Go.transform.forward * -3 * Time.deltaTime;
-            }
-        }
     }
 
     public override void CheckCondition(MobInfo data)
@@ -1330,7 +1348,6 @@ public class FSMDeadState : FSMState
         AnimatorStateInfo info = data.m_AnimationController.Animator.GetCurrentAnimatorStateInfo(0);
         if (info.IsName("Dead"))
         {
-            if (info.normalizedTime >= 0.8f) bUnload = true;
             if (info.normalizedTime >= 1.0f)
             {
                 MobManager.m_Instance.UnloadMob(data.m_ID, data);

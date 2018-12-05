@@ -122,8 +122,11 @@ public class PlayerFSMSystem
             }
             else
             {
-                m_currentState.CheckCondition(m_Data);
-                m_currentState.Do(m_Data);
+                if (m_CurrentGlobalStateID != ePlayerFSMStateID.ReliveStateID)
+                {
+                    m_currentState.CheckCondition(m_Data);
+                    m_currentState.Do(m_Data);
+                }
             }
         }
 

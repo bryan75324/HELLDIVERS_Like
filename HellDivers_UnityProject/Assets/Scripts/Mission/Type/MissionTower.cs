@@ -9,6 +9,7 @@ using UnityEditor;
 
 #endif
 
+[RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(CheckCodesMechine))]
 public class MissionTower : Mission, IInteractable
 {
@@ -45,6 +46,7 @@ public class MissionTower : Mission, IInteractable
     private Animator m_Animator;
     private eCode[] m_Codes;
     private CheckCodesMechine m_CodeMechine;
+    private SoundManager m_SoundManager;
 
     private delegate void TowerDoState();
 
@@ -83,9 +85,16 @@ public class MissionTower : Mission, IInteractable
 
     private void Awake()
     {
+        m_SoundManager = this.GetComponent<SoundManager>();
+        SoundDataSetting soundData = Resources.Load("Sounds/Mission/MissionTower_SoundDataSetting") as SoundDataSetting;
+        m_SoundManager.SetAudioClips(soundData.SoundDatas);
+
         m_CodeMechine = this.GetComponent<CheckCodesMechine>();
         m_CodeMechine.OnGetResult += SuccessOnCheckCode;
         m_CodeMechine.OnFaild += StartCheckCodes;
+        m_CodeMechine.OnGetResult += () => m_SoundManager.PlayInWorld(0, this.transform.position);
+        m_CodeMechine.OnChecking += () => m_SoundManager.PlayInWorld(3, this.transform.position);
+        m_CodeMechine.OnFaild += () => m_SoundManager.PlayInWorld(2, this.transform.position);
     }
 
     // Use this for initialization
@@ -122,6 +131,7 @@ public class MissionTower : Mission, IInteractable
         CurrentPlayer = player;
         m_CodeMechine.InputHorizontal = player.InputSettting.StratagemHorizontal;
         m_CodeMechine.InputVertical = player.InputSettting.StratagemVertical;
+        m_SoundManager.PlayInWorld(4, this.transform.position);
         StartCheckCodes();
     }
 
@@ -144,6 +154,7 @@ public class MissionTower : Mission, IInteractable
 
     private void StopCheckCodes()
     {
+        m_SoundManager.Stop();
         m_CodeMechine.StopCheckCodes();
         CurrentPlayer = null;
         m_Animator.SetTrigger("Stop");
@@ -167,7 +178,9 @@ public class MissionTower : Mission, IInteractable
 
     private void CheckCodeState()
     {
-        if (Vector3.Distance(this.transform.position, CurrentPlayer.transform.position) > m_Data.ActivateRadius)
+        if (Vector3.Distance(this.transform.position, CurrentPlayer.transform.position) > m_Data.ActivateRadius
+            || Input.GetKeyDown(CurrentPlayer.InputSettting.Cancel)
+            || CurrentPlayer.IsDead)
         {
             StopCheckCodes();
         }
@@ -181,6 +194,8 @@ public class MissionTower : Mission, IInteractable
     {
         if (Vector3.Distance(this.transform.position, CurrentPlayer.transform.position) > m_Data.ActivateRadius || CurrentPlayer.IsDead)
         {
+            CurrentPlayer.SoundManager.PlayOnce(1040);
+            m_SoundManager.Stop();
             StopCheckCodes();
             return;
         }
@@ -206,7 +221,9 @@ public class MissionTower : Mission, IInteractable
         else
         {
             m_Animator.SetTrigger("Finish");
+            m_SoundManager.PlayInWorld(1, this.transform.position);
             m_bFinished = true;
+            CompleteMission();
             InteractiveItemManager.Instance.RemoveItem(this);
 
             List<Player> pList = InGamePlayerManager.Instance.Players;
@@ -231,7 +248,6 @@ public class MissionTower : Mission, IInteractable
                 else return false;
             });
 
-        CompleteMission();
         yield break;
     }
 

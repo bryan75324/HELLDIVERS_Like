@@ -7,6 +7,8 @@ namespace HELLDIVERS.UI.InGame
 {
     public class UIMissionCountInfo : UIMissionInfo
     {
+        public event UIEventHolder OnFinished;
+
         public MissionKillMob CurrentMission { get { return m_currentMission; } }
 
         private MissionKillMob m_currentMission;
@@ -35,6 +37,7 @@ namespace HELLDIVERS.UI.InGame
                 m_CheckMark.gameObject.SetActive(true);
                 m_Description.color = UIHelper.Player1_Color;
                 m_Count.color = UIHelper.Player1_Color;
+                if (OnFinished != null) OnFinished();
             }
 
             m_Count.text = string.Format("( {0} / {1} )", m_currentMission.CurrentAmount, m_currentMission.Data.KillAmount);

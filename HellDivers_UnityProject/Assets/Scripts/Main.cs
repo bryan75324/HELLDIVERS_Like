@@ -5,25 +5,31 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     public static Main Instance { get; private set; }
-    private SceneController m_SceneController;
-    private MusicManager m_MusicManager;
-    private InputManager m_InputManager = new InputManager();
-    private DataSaverManager m_DataManager = new DataSaverManager();
     private GameData m_GameData = new GameData();
+    private InputManager m_InputManager = new InputManager();
     private PlayerManager m_PlayerManager = new PlayerManager();
+    private DataSaverManager m_DataManager = new DataSaverManager();
+    private MusicManager m_MusicManager;
+    private SceneController m_SceneController;
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
 
-        DontDestroyOnLoad(this.gameObject);
-        m_GameData.Init();
         m_MusicManager = this.gameObject.AddComponent<MusicManager>();
         m_SceneController = this.gameObject.AddComponent<SceneController>();
-        m_PlayerManager.Init();
+        DontDestroyOnLoad(this.gameObject);
+
+        m_GameData.Init();
         m_InputManager.Init();
+        m_PlayerManager.Init();
         m_DataManager.Init();
+        m_MusicManager.Init();
+        m_SceneController.Init();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Use this for initialization
@@ -34,6 +40,13 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            Cursor.lockState = (Cursor.lockState == CursorLockMode.Locked) ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = !Cursor.visible;
+        }
+#endif
     }
 
     [ContextMenu("Print Player Info")]

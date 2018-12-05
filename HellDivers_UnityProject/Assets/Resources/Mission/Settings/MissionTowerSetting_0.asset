@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb3bd59865397c49b691d5fd0e887a8, type: 3}
+  m_Name: MissionTowerSetting_0
+  m_EditorClassIdentifier: 
+  m_Priority: 0
+  m_Type: 0
+  m_Reward:
+    EXP: 250
+    Money: 1000
+  m_Id: MissionTower
+  m_InteractRadius: 4
+  m_ActivateRadius: 15
+  m_MinRadius: 20
+  m_MaxRadius: 25
+  m_ActivatingTime: 20
+  m_CodeLenghtMin: 6
+  m_CodeLenghtMax: 8
+  m_PhaseDatas:
+  - m_Time: 0
+    m_FishNum: 10
+    m_FishVariantNum: 0
+    m_PatrolNum: 0
+    m_TankNum: 0
+  - m_Time: 10
+    m_FishNum: 5
+    m_FishVariantNum: 0
+    m_PatrolNum: 0
+    m_TankNum: 0
+  - m_Time: 12
+    m_FishNum: 0
+    m_FishVariantNum: 1
+    m_PatrolNum: 0
+    m_TankNum: 0
+  - m_Time: 15
+    m_FishNum: 10
+    m_FishVariantNum: 0
+    m_PatrolNum: 0
+    m_TankNum: 0
+  - m_Time: 18
+    m_FishNum: 0
+    m_FishVariantNum: 2
+    m_PatrolNum: 0
+    m_TankNum: 0

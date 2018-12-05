@@ -5,14 +5,15 @@ using UnityEngine;
 public class RespawnPackage : MonoBehaviour
 {
     [SerializeField] private float m_SapwnRadius = 5.0f;
+    [SerializeField] private float m_SceenSpaceBorber = 50.0f;
 
     private void OnEnable()
     {
         if (InGamePlayerManager.Instance == null) return;
 
         Vector3 spawnPos = this.transform.position;
-        Vector3 screenPos = Camera.main.ScreenToWorldPoint(this.transform.position);
-        if (screenPos.x <= 0 || screenPos.x > Camera.main.scaledPixelWidth || screenPos.y < 0 || screenPos.y > Camera.main.scaledPixelHeight)
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+        if (screenPos.x < m_SceenSpaceBorber || screenPos.x > Camera.main.scaledPixelWidth - m_SceenSpaceBorber || screenPos.y < m_SceenSpaceBorber || screenPos.y > Camera.main.scaledPixelHeight - m_SceenSpaceBorber)
         {
             List<Player> pList = InGamePlayerManager.Instance.Players;
             for (int i = 0; i < pList.Count; i++)

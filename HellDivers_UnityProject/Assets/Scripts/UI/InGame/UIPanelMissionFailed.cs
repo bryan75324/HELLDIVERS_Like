@@ -59,7 +59,7 @@ public class UIPanelMissionFailed : MonoBehaviour
 
     public void ClickAbandon()
     {
-        if (SceneController.Instance != null) SceneController.Instance.ToLobby();
+        GameMain.Instance.MissionAbandon();
     }
 
     public void UpdateIndicator()

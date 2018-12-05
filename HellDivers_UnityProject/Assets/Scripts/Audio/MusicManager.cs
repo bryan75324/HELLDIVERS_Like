@@ -12,7 +12,9 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
     public eMusicSelection CurrentSelection { get { return m_CurrentSelection; } }
+    public AudioSource Audio { get { return m_AudioSource; } }
 
+    [SerializeField] private float m_MaxVolume = 0.5f;
     private AudioSource m_AudioSource;
     private BGMSetting m_Setting;
     private eMusicSelection m_CurrentSelection;
@@ -22,12 +24,12 @@ public class MusicManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(this);
         m_AudioSource = this.GetComponent<AudioSource>();
-        m_AudioSource.loop = true;
-        m_Setting = Resources.Load<BGMSetting>("BGMSetting");
     }
 
-    private void Start()
+    public void Init()
     {
+        m_AudioSource.loop = true;
+        m_Setting = Resources.Load<BGMSetting>("BGMSetting");
         PlayMusic(eMusicSelection.Theme, 2);
     }
 
@@ -84,10 +86,10 @@ public class MusicManager : MonoBehaviour
     private IEnumerator AudioFadeIn(float time)
     {
         m_AudioSource.volume = 0;
-        while (m_AudioSource.volume < 1)
+        while (m_AudioSource.volume < m_MaxVolume)
         {
             m_AudioSource.volume += Time.deltaTime / time;
-            if (m_AudioSource.volume > 1) m_AudioSource.volume = 1;
+            if (m_AudioSource.volume > m_MaxVolume) m_AudioSource.volume = m_MaxVolume;
             yield return null;
         }
     }

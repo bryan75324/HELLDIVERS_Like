@@ -5,91 +5,29 @@ using UnityEngine;
 public class GrenadesController : MonoBehaviour
 {
     public enum eSwitch { UP, LEFT, DOWN, RIGHT }
+
     #region Public Method
 
+    #region Set Greades
     /// <summary>
     /// Equip grenades and set grenade to current active grenade, refresh grenade counter
     /// </summary>
     /// <param name="ids">Grenades' ID</param>
     /// <param name="t">Strat Position</param>
-    public void AddGrenades(List<int> ids, Transform startPos, Transform throwPos)
+    public void AddGrenades(List<int> ids, Transform startPos, Transform throwPos, Player player)
     {
-        foreach (int id in ids) { Equipment(id); }
+        foreach (int id in ids)
+        {
+            GrenadeComponent component = new GrenadeComponent();
+            component.m_Behavior = m_GrenadeFactory.CreateGrenade(id);
+            component.Count = component.m_Behavior.grenadeInfo.MaxCount;
+            m_dGrenades.Add(id, component);
+        }
+        CurrentID = GrenadeKeys[0];
         m_StarPos = startPos;
         m_ThrowPos = throwPos;
-    }
-
-    /// <summary>
-    /// Hold grenade for enhance throwing force
-    /// </summary>
-    /// <returns></returns>
-    public bool Holding()
-    {
-        if (GrenadeCounter <= 0) { return false; }
-
-        if (!m_bHolding) { LoadGrenade(); }
-        if (m_Grenades == null) { return false; }
-        m_Grenades.GetComponent<Grenades>().m_Force += 5 * Time.fixedDeltaTime;
-        return true;
-    }
-    /// <summary>
-    /// Grenade's follow
-    /// </summary>
-    public void Following()
-    {
-        m_Grenades.transform.position = m_StarPos.position;
-        m_Grenades.transform.forward = m_StarPos.forward;
-    }
-
-    /// <summary>
-    /// Release the button to throw the grenade
-    /// </summary>
-    public void Throw()
-    {
-        if (!m_bHolding) return;
-        m_iCounter--;
-        m_dActiveGrenades[CurrentID] = m_iCounter;
-        m_Grenades.transform.position = m_ThrowPos.position;
-        m_Grenades.transform.forward = m_ThrowPos.forward;
-        m_Grenades.transform.localScale *= 5f;
-        m_Grenades.GetComponent<Grenades>().Throw();
-        m_bHolding = false;
-        if (OnCount != null) OnCount();
-    }
-
-    /// <summary>
-    ///  Input StratagemVertical or StratagemHorizontal to switch type of grenades
-    /// </summary>
-    public void SwitchGrenades()
-    {
-        eSwitch? input = GetESwitch();
-        if (Keys.Length <= 1) { return; }
-        switch (input)
-        {
-            case eSwitch.UP:
-                
-                Equipment(Keys[0]);
-                break;
-
-            case eSwitch.LEFT:
-                Equipment(Keys[1]);
-                break;
-
-            case eSwitch.RIGHT:
-                if (Keys.Length < 3) { return; }
-                Equipment(Keys[2]);
-                break;
-
-            case eSwitch.DOWN:
-                if (Keys.Length < 4) { return; }
-                Equipment(Keys[3]);
-                break;
-
-            default:
-                break;
+        m_Player = player;
         }
-        //m_dActiveGrenades[CurrentID] = GrenadeCounter;
-    }
 
     /// <summary>
     /// Add the count of grenades with id
@@ -98,22 +36,87 @@ public class GrenadesController : MonoBehaviour
     /// <param name="count">Add count</param>
     public void AddGrenadesCount(int id, int count)
     {
-        m_dActiveGrenades[id] += count;
+        m_dGrenades[id].AddCount(id);
         if (id == CurrentID)
         {
-            m_iCounter = m_dActiveGrenades[id];
             if (OnCount != null) OnCount();
         }
     }
-    
+
+    /// <summary>
+    ///  Input StratagemVertical or StratagemHorizontal to switch type of grenades
+    /// </summary>
+    public void SwitchGrenades()
+    {
+        eSwitch? input = GetESwitch();
+        if (m_dGrenades.Count <= 1) { return; }
+        switch (input)
+        {
+            case eSwitch.UP:
+                Equipment(GrenadeKeys[0]);
+                break;
+
+            case eSwitch.LEFT:
+                Equipment(GrenadeKeys[1]);
+                break;
+
+            case eSwitch.RIGHT:
+                if (m_dGrenades.Count < 3) { return; }
+                Equipment(GrenadeKeys[2]);
+                break;
+
+            case eSwitch.DOWN:
+                if (m_dGrenades.Count< 4) { return; }
+                Equipment(GrenadeKeys[3]);
+                break;
+
+            default:
+                break;
+        }
+    }
+
     public void ResetGrenades()
     {
-        for (int i = 0; i < Keys.Length; i++)
+        foreach (var item in m_dGrenades)
         {
-            m_dActiveGrenades[Keys[i]] = 2;
+            m_dGrenades[item.Key].Count = 2;
         }
-        m_iCounter = m_dActiveGrenades[m_iCurrentID];
+        if (OnCount != null) OnCount();
+
     }
+    #endregion
+
+    #region Grenade Method
+    /// <summary>
+    /// Hold grenade for enhance throwing force
+    /// </summary>
+    /// <returns></returns>
+    public bool Holding()
+    {
+        if (GrenadeCounter <= 0) { return false; }
+        if (!m_bHolding)
+        {
+            m_bHolding = LoadGrenade();
+            return m_bHolding;
+        }
+        else mCurBehaviors.grenadeInfo.Force += 5 * Time.fixedDeltaTime;
+        return true;
+    }
+
+    /// <summary>
+    /// Release the button to throw the grenade
+    /// </summary>
+    public void Throw()
+    {
+        if (!m_bHolding) return;
+        GrenadeCounter--;
+        mCurBehaviors.Throw(ref m_Grenade, m_ThrowPos);
+        m_Grenade.GetComponent<Grenades>().SetInfo(mCurBehaviors.grenadeInfo, m_Player);
+        m_bHolding = false;
+        
+        if (OnCount != null) OnCount();
+    }
+    #endregion
 
     #endregion Public Method
 
@@ -130,50 +133,28 @@ public class GrenadesController : MonoBehaviour
     }
 
     //Create or equip grenades
-    private void Equipment(int id, int count = 2)
+    private void Equipment(int id)
     {
-        if (m_dActiveGrenades.ContainsKey(id) == false) { CreateGrenades(id, count); }
-        m_iCurrentID = id;
-        m_iCounter = m_dActiveGrenades[id];
+        CurrentID = id;
         if (OnCount != null) OnCount();
         if (OnChangeID != null) OnChangeID();
     }
 
     //Set grenades active
-    private void LoadGrenade()
+    private bool LoadGrenade()
     {
-        m_Grenades = ObjectPool.m_Instance.LoadGameObjectFromPool(CurrentID)?? null;        
-        if (m_Grenades == null) { return; }
+        m_Grenade = m_dGrenades[CurrentID].LoadGrenade();
+        if (m_Grenade == null) return false;
         m_bHolding = true;
-        m_Grenades.transform.localScale *= 0.2f;
-        m_Grenades.SetActive(true);
+        m_Grenade.transform.position = m_StarPos.position;
+        m_Grenade.transform.forward = m_StarPos.forward;
+        m_Grenade.transform.localScale *= 0.2f;
+        m_Grenade.transform.SetParent(m_StarPos);
+        m_Grenade.SetActive(true);
+        return true;
     }
 
     //Create new grenade whitch doesn't exist in dictionary
-    private void CreateGrenades(int id, int count)
-    {
-        GrenadeInfo grenaderInfo = GameData.Instance.GrenadeInfoTable[id];
-        string m_sGrenade = "Grenade_" + grenaderInfo.Title;
-        string m_sEffect = "Effect_" + grenaderInfo.Title;
-        Object grenade;
-        Object effect;
-        if (ResourceManager.m_Instance != null)
-        {
-            grenade = ResourceManager.m_Instance.LoadData(typeof(GameObject), "Grenades", m_sGrenade, false);
-            effect = ResourceManager.m_Instance.LoadData(typeof(GameObject), "Grenades", m_sEffect, false);
-        }
-        else
-        {
-            grenade = Resources.Load("Grenades/Grenade_Pumpkin");
-            effect = Resources.Load("Grenades/Effect_Pumpkin");
-        }
-        if (ObjectPool.m_Instance == null) ObjectPool.m_Instance.Init();
-        ObjectPool.m_Instance.InitGameObjects(grenade, count, id);
-        ObjectPool.m_Instance.InitGameObjects(effect, count, id + 100);
-
-        m_MaxCount = count;
-        m_dActiveGrenades.Add(id, count);
-    }
 
     #endregion Private method
 
@@ -188,54 +169,88 @@ public class GrenadesController : MonoBehaviour
 
     #region Public properties
 
-    public int CurrentID { get { return m_iCurrentID; } }
-    public Dictionary<int, int> ActiveGrenades { get { return m_dActiveGrenades; } }
+    public Dictionary<int, int> ActiveGrenades
+    {
+        get
+        {
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            foreach (var item in m_dGrenades)
+            {
+                dic.Add(item.Key, item.Value.Count);
+            }
+            return dic;
+        }
+    }
+
+    public int CurrentID { private set; get; }
 
     public int GrenadeCounter
     {
-        get { return m_iCounter; }
-        set
+        get { return m_dGrenades[CurrentID].Count; }
+        private set
         {
-            if (value > m_MaxCount) m_iCounter = m_MaxCount;
-            else if (m_iCounter < 0) m_iCounter = 0;
-            else m_iCounter = value;
+            m_dGrenades[CurrentID].Count = value;
+        }
+    }
+
+    public int[] GrenadeKeys
+    {
+        get
+        {
+            int[] keys = new int[m_dGrenades.Count];
+            m_dGrenades.Keys.CopyTo(keys, 0);
+            return keys;
         }
     }
 
     #endregion Public properties
 
-
     #region Private field
 
-    private Dictionary<int, int> m_dActiveGrenades = new Dictionary<int, int>();
-    private int[] Keys {
-        get
-        {
-            int[] keys = new int[m_dActiveGrenades.Count];
-            m_dActiveGrenades.Keys.CopyTo(keys, 0);
-            return keys;
-        }
-    }
-    private GameObject m_Grenades;
+    private Dictionary<int, GrenadeComponent> m_dGrenades = new Dictionary<int, GrenadeComponent>();
+    private IGrenadesBehaviors mCurBehaviors { get { return m_dGrenades[CurrentID].m_Behavior; } }
+    private GrenadeFactory m_GrenadeFactory = new GrenadeFactory();
+    private GameObject m_Grenade;
     private Transform m_StarPos;
     private Transform m_ThrowPos;
+    private Player m_Player;
     private bool m_bHolding;
 
-    [SerializeField]
-    private int m_iCurrentID;
-
-    private int m_iCounter;
-    private int m_MaxCount;
     private string m_InputVertical = "StratagemVertical";
     private string m_InputHorizontal = "StratagemHorizontal";
 
     #endregion Private field
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
             ResetGrenades();
         }
+
     }
+
+    class GrenadeComponent
+    {
+        public IGrenadesBehaviors m_Behavior;
+        public GameObject LoadGrenade()
+        {
+            if (Count <= 0) return null;
+            GameObject grenade = ObjectPool.m_Instance.LoadGameObjectFromPool(m_Behavior.grenadeInfo.ID) ?? null;
+            return grenade;
+        }
+        public int Count
+        {
+            get { return _count;  }
+            set
+            {
+                if (value > m_Behavior.grenadeInfo.MaxCount) _count = m_Behavior.grenadeInfo.MaxCount;
+                else if (value < 0) _count = 0;
+                else _count = value;
+            }
+        }
+        public void AddCount(int i) { _count += i; }
+        private int _count;
+    }
+
 }

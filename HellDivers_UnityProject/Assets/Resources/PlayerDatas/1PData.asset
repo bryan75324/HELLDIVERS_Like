@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Name: 1PData
   m_EditorClassIdentifier: 
   Username: Ivan
-  Rank: 3
-  Exp: 4500
-  Money: 100000
-  Weapons: e00500001a050000
+  Rank: 1
+  Exp: 0
+  Money: 10000
+  Weapons: 150500004d040000
   Stratagems: d1070000d2070000d307000000000000
   Grenades: a10f0000a20f0000a30f0000a40f0000
-  UnlockedWeapons: e90300004d0400001a05000079050000e0050000
+  UnlockedWeapons: e90300004d0400001505000079050000
   UnlockedStratagems: d0070000d1070000d2070000d3070000

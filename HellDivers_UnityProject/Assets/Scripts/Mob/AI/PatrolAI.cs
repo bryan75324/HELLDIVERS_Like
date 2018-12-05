@@ -8,15 +8,21 @@ public class PatrolAI : Character
 
     private FSMSystem m_FSM;
     public MobInfo m_AIData;
-    public PlayerController m_PlayerController;
+    public eFSMStateID m_CurrentState;
+    public GameObject m_GODeadBlood;
+    public GameObject m_GOHurtBlood;
+    public BloodSpurt m_DeadBloodSpurt;
+    public BloodSpurt m_HurtBloodSpurt;
+
     private MobAnimationsController m_MobAnimator;
     private BoxCollider m_BobyCollider;
     private CapsuleCollider m_DamageCollider;
     private MobAimLine m_MobAimLine;
     public bool m_bGoIdle = false;
 
-    public eFSMStateID m_CurrentState;
-    
+
+    private SoundManager m_SoundManager;
+
     #region Events
 
     public delegate void MobEventHolder();
@@ -27,29 +33,44 @@ public class PatrolAI : Character
     // Use this for initialization
     private void OnEnable()
     {
+        m_SoundManager = this.GetComponent<SoundManager>();
+        SoundDataSetting Soundsetting = ResourceManager.m_Instance.LoadData(typeof(SoundDataSetting), "Sounds/Mobs/Patrol", "SoundDataSetting") as SoundDataSetting;
+        m_SoundManager.SetAudioClips(Soundsetting.SoundDatas);
+        MobManager.m_Instance.OnDestroyAll += Death;
         if (m_FSM == null) return;
         m_bDead = false;
         m_bGoIdle = false;
         m_CurrentHp = m_MaxHp;
         m_BobyCollider.enabled = true;
         m_DamageCollider.enabled = true;
+        m_GODeadBlood = null;
+        m_GOHurtBlood = null;
+        m_DeadBloodSpurt = null;
+        m_HurtBloodSpurt = null;
         m_FSM.PerformTransition(eFSMTransition.Go_WanderIdle);
     }
-        FSMWanderIdleState m_WanderIdleState = new FSMWanderIdleState();
-        FSMWanderState m_WanderState = new FSMWanderState();
-        FSMCallArmyState m_CallArmyState = new FSMCallArmyState();
-        FSMFleeState m_FleeState = new FSMFleeState();
-        FSMChaseState m_Chasestate = new FSMChaseState();
-        FSMPatrolAttackState m_PatrolAttackstate = new FSMPatrolAttackState();
-        FSMIdleState m_IdleState = new FSMIdleState();
-        FSMDodgeState m_DodgeState = new FSMDodgeState();
-        FSMNoPlayerWanderIdleState m_FSMNoPlayerWanderIdleState = new FSMNoPlayerWanderIdleState();
-        FSMNoPlayerWanderState m_FSMNoPlayerWander = new FSMNoPlayerWanderState();
+
+    public void OnDisable()
+    {
+        MobManager.m_Instance.OnDestroyAll -= Death;
+    }
+
+    FSMWanderIdleState m_WanderIdleState = new FSMWanderIdleState();
+    FSMWanderState m_WanderState = new FSMWanderState();
+    FSMCallArmyState m_CallArmyState = new FSMCallArmyState();
+    FSMFleeState m_FleeState = new FSMFleeState();
+    FSMChaseState m_Chasestate = new FSMChaseState();
+    FSMPatrolAttackState m_PatrolAttackstate = new FSMPatrolAttackState();
+    FSMIdleState m_IdleState = new FSMIdleState();
+    FSMDodgeState m_DodgeState = new FSMDodgeState();
+    FSMNoPlayerWanderIdleState m_FSMNoPlayerWanderIdleState = new FSMNoPlayerWanderIdleState();
+    FSMNoPlayerWanderState m_FSMNoPlayerWander = new FSMNoPlayerWanderState();
+
     protected override void Start()
     {
         m_AIData = new MobInfo();
         GameData.Instance.MobInfoTable[3200].CopyTo(m_AIData);
-
+        
         m_MaxHp = m_AIData.m_fHp;
         base.Start();
 
@@ -64,6 +85,7 @@ public class PatrolAI : Character
         m_AIData.navMeshAgent = this.GetComponent<NavMeshAgent>();
         m_AIData.navMeshAgent.enabled = false;
         m_AIData.m_MobAimLine = m_MobAimLine;
+        m_AIData.m_SoundManager = m_SoundManager;
 
         #region FSMMap
 
@@ -166,6 +188,8 @@ public class PatrolAI : Character
         {
             m_FSM.DoState();
         }
+
+        if (Input.GetKeyDown(KeyCode.U)) Death();
     }
 
     public void PerformGetHurt(Vector3 point)
@@ -186,6 +210,7 @@ public class PatrolAI : Character
     {
         Vector3 dir = this.transform.position - point;
         dir.y = 0;
+        dir.Normalize();
         for (float i = 0; i < time; i += Time.deltaTime)
         {
             this.transform.position += dir * Time.deltaTime;
@@ -200,36 +225,46 @@ public class PatrolAI : Character
         m_FSM.PerformGlobalTransition(eFSMTransition.Go_Dead);
     }
 
-    public override bool TakeDamage(IDamager damager, Vector3 hitPoint)
+    public override bool TakeDamage(float damage, Vector3 hitPoint)
     {
         if (IsDead) return false;
-        CurrentHp -= damager.Damage;
-
-        GameObject go = ObjectPool.m_Instance.LoadGameObjectFromPool(3003);
-        BloodSpurt bloodSpurt = go.GetComponent<BloodSpurt>();
+        CurrentHp -= damage;
 
         if (m_CurrentHp <= 0)
         {
             m_BobyCollider.enabled = false;
             m_DamageCollider.enabled = false;
-            StartCoroutine(Displacement(hitPoint, 2f));
+            StartCoroutine(Displacement(hitPoint, 0.2f));
 
-            go = ObjectPool.m_Instance.LoadGameObjectFromPool(3004);
-            bloodSpurt = go.GetComponent<BloodSpurt>();
-            bloodSpurt.Init(m_AIData, this.transform.position + Vector3.up);
+            m_GODeadBlood = ObjectPool.m_Instance.LoadGameObjectFromPool(3004);
+            m_DeadBloodSpurt = m_GODeadBlood.GetComponent<BloodSpurt>();
+            m_DeadBloodSpurt.Init(m_AIData, this.transform.position + Vector3.up);
+            m_SoundManager.PlayInWorld(3904, this.transform.position, 0.5f);
             Death();
-
-            damager.Damager.Record.NumOfKills++;
-            damager.Damager.Record.Exp += (int)m_AIData.m_Exp;
-            damager.Damager.Record.Money += (int)m_AIData.m_Money;
-            return true;
         }
         else
         {
-            bloodSpurt.Init(m_AIData, hitPoint);
+            m_GOHurtBlood = ObjectPool.m_Instance.LoadGameObjectFromPool(3003);
+            m_HurtBloodSpurt = m_GOHurtBlood.GetComponent<BloodSpurt>();
+            m_HurtBloodSpurt.Init(m_AIData, hitPoint);
             PerformGetHurt(hitPoint);
         }
         return true;
+    }
+
+    public override bool TakeDamage(IDamager damager, Vector3 hitPoint)
+    {
+        if (TakeDamage(damager.Damage, hitPoint))
+        {
+            if (damager.Damager != null && IsDead)
+            {
+                damager.Damager.Record.NumOfKills++;
+                damager.Damager.Record.Exp += (int)m_AIData.m_Exp;
+                damager.Damager.Record.Money += (int)m_AIData.m_Money;
+            }
+            return true;
+        }
+        return false;
     }
     public override void Death()
     {

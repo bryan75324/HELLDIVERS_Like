@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(CheckCodesMechine))]
 public class StratagemController : MonoBehaviour
 {
@@ -31,6 +32,11 @@ public class StratagemController : MonoBehaviour
     /// Represent of stratagems check codes behavior mechine.
     /// </summary>
     public CheckCodesMechine CheckCodesMechine { get { return m_CheckCodesMechine; } }
+
+    /// <summary>
+    /// Represent of stratagems sound manager.
+    /// </summary>
+    public SoundManager SoundManager { get { return m_SoundManager; } }
 
     /// <summary>
     /// Represent of current checking code input step.
@@ -70,6 +76,7 @@ public class StratagemController : MonoBehaviour
     private float m_ScaleForce = 1;
     private Stratagem m_CurrentStratagem;
     private CheckCodesMechine m_CheckCodesMechine;
+    private SoundManager m_SoundManager;
 
     #endregion Private Variable
 
@@ -77,8 +84,13 @@ public class StratagemController : MonoBehaviour
 
     private void Awake()
     {
+        m_SoundManager = this.GetComponent<SoundManager>();
+        SoundDataSetting data = ResourceManager.m_Instance.LoadData(typeof(SoundDataSetting), "Sounds/StratagemController", "SoundDataSetting") as SoundDataSetting;
+        m_SoundManager.SetAudioClips(data.SoundDatas);
+
         m_CheckCodesMechine = this.GetComponent<CheckCodesMechine>();
         m_CheckCodesMechine.OnGetResult += GetReady;
+        m_CheckCodesMechine.OnChecking += () => m_SoundManager.PlayInWorld(2001, this.transform.position);
     }
 
     private void OnDestroy()
@@ -222,6 +234,7 @@ public class StratagemController : MonoBehaviour
     /// <returns>Was there are any stratagems in the contorller ?</returns>
     public bool StartCheckCodes()
     {
+        m_SoundManager.PlayOnce(2000);
         m_CheckCodesMechine.Clear();
         foreach (Stratagem s in m_Stratagems)
         {
@@ -239,6 +252,7 @@ public class StratagemController : MonoBehaviour
     /// </summary>
     public void StopCheckCodes()
     {
+        m_SoundManager.Stop();
         m_CheckCodesMechine.StopCheckCodes();
     }
 
@@ -248,7 +262,8 @@ public class StratagemController : MonoBehaviour
     private void GetReady()
     {
         if (m_CheckCodesMechine.Result == null) return;
-
+        m_SoundManager.Stop();
+        m_SoundManager.PlayOnce(2002);
         m_CurrentStratagem = m_CheckCodesMechine.Result as Stratagem;
         m_CurrentStratagem.GetReady();
 

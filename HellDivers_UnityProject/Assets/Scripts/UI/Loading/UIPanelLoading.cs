@@ -14,11 +14,6 @@ public class UIPanelLoading : MonoBehaviour
     [SerializeField] private Text m_TipText;
     private UITweenCanvasAlpha m_Tweener;
 
-    private CanvasGroup m_CanvasGroup;
-    private float m_targetAlpha;
-    private float m_alphaLerp = 0.05f;
-    private float m_targetFillAmount;
-
     private void Awake()
     {
         m_Tweener = this.GetComponent<UITweenCanvasAlpha>();

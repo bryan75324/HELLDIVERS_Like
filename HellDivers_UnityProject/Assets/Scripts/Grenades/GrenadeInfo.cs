@@ -2,15 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EGrenades
-{
-    NORMAL,
-    LIGHTING,
-    MINE,
-    TIMEBOMB,
-    PUMPKIN
-}
-
 public class GrenadeInfo {
 
     public int ID { private set ; get ; }
@@ -29,7 +20,30 @@ public class GrenadeInfo {
     public void SetRange(float range) { Range = range; }
     public void SetMaxCount(int count) { MaxCount = count; }
 
+    public float Force
+    {
+        get { return m_fForce; }
+        set
+        {
+            if (m_fForce > 12) m_fForce = 12;
+            else m_fForce = value;
+        }
+    }
+    public float Gravity { get { return -9.8f; } }
+    public float FallingTime;
+    protected float m_fForce = 1;
 
+    public void CopyTo(GrenadeInfo other)
+    {
+        other.SetID(this.ID);
+        other.SetType(this.Type);
+        other.SetTitle(this.Title);
+        other.SetDamage(this.Damage);
+        other.SetTimer(this.Timer);
+        other.SetRange(this.Range);
+        other.SetMaxCount(this.MaxCount);
+        other.Force = this.Force;
+    }
 
 }
 

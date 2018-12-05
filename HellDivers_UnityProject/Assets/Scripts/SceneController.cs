@@ -11,7 +11,7 @@ public class SceneController : MonoBehaviour
 
     private DelegateOnSceneLoad OnLoadFinished;
 
-    private void Awake()
+    public void Init()
     {
         if (Instance == null) Instance = this;
         else Destroy(this);
@@ -39,6 +39,12 @@ public class SceneController : MonoBehaviour
     public void ToReward()
     {
         SceneManager.LoadScene("Reward");
+    }
+
+    [ContextMenu("ToCredits")]
+    public void ToCredits()
+    {
+        SceneManager.LoadScene("Credits");
     }
 
     private IEnumerator LoadScene(string scene)

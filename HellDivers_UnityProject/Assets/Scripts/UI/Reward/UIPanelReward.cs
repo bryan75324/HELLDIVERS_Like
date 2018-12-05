@@ -6,28 +6,45 @@ using UnityEngine.EventSystems;
 
 namespace HELLDIVERS.UI
 {
+    [RequireComponent(typeof(SoundManager))]
     public class UIPanelReward : MonoBehaviour
     {
         #region SerializeField
 
+        [SerializeField] private Image m_Background;
+        [SerializeField] private Sprite m_MissionSuccess;
+        [SerializeField] private Sprite m_MissionFailed;
         [SerializeField] private UITweenImageAlpha m_BlackCardTween;
         [SerializeField] private Text m_GameTime;
         [SerializeField] private Transform m_PanelMissionReward;
+        [SerializeField] private UIMissionTitle m_MissionTitle;
         [SerializeField] private UIMissionReward m_MissionRewardPrefab;
         [SerializeField] private UIMissionRewardEXP m_MissionRewardExp;
         [SerializeField] private Transform m_PanelReward;
         [SerializeField] private UIPlayerReward m_PlayerRewardPrefab;
         [SerializeField] private Button m_BtnContinue;
+        private SoundManager m_SoundManager;
 
         #endregion SerializeField
 
         #region MonoBehaviour
 
+        private void Awake()
+        {
+            m_SoundManager = GetComponent<SoundManager>();
+            SoundDataSetting soundData = Resources.Load("Sounds/Reward/PanelReward_SoundDataSetting") as SoundDataSetting;
+            m_SoundManager.SetAudioClips(soundData.SoundDatas);
+
+            m_MissionRewardMap = new Dictionary<eMissionType, UIMissionReward>();
+            m_PlayerRewardMap = new Dictionary<int, UIPlayerReward>();
+        }
+
         // Use this for initialization
         private void Start()
         {
-            m_MissionRewardMap = new Dictionary<eMissionType, UIMissionReward>();
-            m_PlayerRewardMap = new Dictionary<int, UIPlayerReward>();
+            m_MissionTitle.Initialize(InGameRewardManager.Instance.IsMissionSuccess);
+            m_Background.sprite = (InGameRewardManager.Instance.IsMissionSuccess) ? m_MissionSuccess : m_MissionFailed;
+
             CreatePlayerRewardElement();
             CreateMissionRewardElement();
 
@@ -44,6 +61,9 @@ namespace HELLDIVERS.UI
 
         private IEnumerator OnDarw()
         {
+            m_MissionTitle.CanavasTween.PlayForward();
+            yield return new WaitForSeconds(m_MissionTitle.CanavasTween.TimeLenght);
+
             if (m_MissionRewardMap.Count > 0)
             {
                 float missionUITimeLenght = 0;
@@ -72,6 +92,7 @@ namespace HELLDIVERS.UI
 
         public void ClickContinueBtn()
         {
+            m_SoundManager.PlayOnce(0);
             MusicManager.Instance.FadeOut(1);
             m_BlackCardTween.OnTweenFinished += SceneChangeToLobby;
             m_BlackCardTween.PlayForward();

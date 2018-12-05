@@ -30,12 +30,7 @@ public class PlayerRecord
     }
 
     public int Money { get { return m_Money; } set { m_Money = value; } }
-
-    public int Exp
-    {
-        get { return m_Exp; }
-        set { if (value > m_Exp) m_Exp = value; }
-    }
+    public int Exp { get { return m_Exp; } set { m_Exp = value; } }
 
     private int m_TimesOfDeath;
     private int m_NumOfKills;

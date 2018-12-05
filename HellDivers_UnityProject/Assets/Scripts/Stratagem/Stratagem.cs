@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SoundManager))]
 [RequireComponent(typeof(Rigidbody))]
 public class Stratagem : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public class Stratagem : MonoBehaviour
     #region Private Variable
 
     [SerializeField] private StratagemInfo m_Info;
+    private SoundManager m_SoundManager;
     private Transform m_ReadyPos;
     private Transform m_LaunchPos;
     private GameObject m_Display;
@@ -161,6 +163,10 @@ public class Stratagem : MonoBehaviour
             ObjectPool.m_Instance.InitGameObjects(result, count, newInfo.ResultID);
         }
 
+        // Load Sound
+        SoundDataSetting data = ResourceManager.m_Instance.LoadData(typeof(SoundDataSetting), "Sounds/Stratagems", "SoundDataSetting") as SoundDataSetting;
+        m_SoundManager.SetAudioClips(data.SoundDatas);
+
         m_LaunchPos = launchPos;
         m_ReadyPos = readyPos;
         this.transform.localPosition = Vector3.zero;
@@ -208,6 +214,7 @@ public class Stratagem : MonoBehaviour
     private void Awake()
     {
         m_Info = new StratagemInfo();
+        m_SoundManager = this.GetComponent<SoundManager>();
     }
 
     // Use this for initialization
@@ -355,6 +362,8 @@ public class Stratagem : MonoBehaviour
     {
         m_eState = eState.Activating;
 
+        m_SoundManager.PlayInWorld(0, this.transform.position);
+
         m_ActivationTimer = 0.0f;
         if (OnStartActivation != null) OnStartActivation();
 
@@ -374,6 +383,7 @@ public class Stratagem : MonoBehaviour
             return (currentAnima.IsName("End") && currentAnima.normalizedTime >= 1);
         });
 
+        m_SoundManager.PlayInWorld(1, this.transform.position);
         LoadResult();  // Load stratagem result from object pool.
 
         m_eState = eState.Idle;

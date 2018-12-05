@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 namespace HELLDIVERS.UI.InGame
 {
+    [RequireComponent(typeof(SoundManager))]
     public class UIPanelMission : MonoBehaviour
     {
         public static UIPanelMission Instance { get; private set; }
 
         [SerializeField] private UIMissionGroupInfo m_MissionGroupInfoPrefab;
         [SerializeField] private UIMissionCountInfo m_MissionCountInfoPrefab;
+        private SoundManager m_SoundManager;
 
         private Dictionary<eMissionType, List<UIMissionInfo>> m_MissionElementMap;
 
@@ -18,6 +20,10 @@ namespace HELLDIVERS.UI.InGame
         {
             if (Instance == null) Instance = this;
             else Destroy(this.gameObject);
+
+            m_SoundManager = this.GetComponent<SoundManager>();
+            SoundDataSetting soundData = ResourceManager.m_Instance.LoadData(typeof(SoundDataSetting), "Sounds/Mission", "PanelMission_SoundDataSetting") as SoundDataSetting;
+            m_SoundManager.SetAudioClips(soundData.SoundDatas);
 
             m_MissionElementMap = new Dictionary<eMissionType, List<UIMissionInfo>>();
         }
@@ -48,6 +54,7 @@ namespace HELLDIVERS.UI.InGame
                     {
                         UIMissionGroupInfo missionGroupUI = Instantiate(m_MissionGroupInfoPrefab, this.transform);
                         missionGroupUI.Initialize(mission);
+                        missionGroupUI.OnFinished += () => m_SoundManager.PlayOnce(0);
                         pList.Add(missionGroupUI);
                     }
 
@@ -56,6 +63,7 @@ namespace HELLDIVERS.UI.InGame
                 case eMissionType.KillMob:
                     UIMissionCountInfo missionCountUI = Instantiate(m_MissionCountInfoPrefab, this.transform);
                     missionCountUI.Initialize(mission);
+                    missionCountUI.OnFinished += () => m_SoundManager.PlayOnce(0);
                     pList.Add(missionCountUI);
                     break;
             }

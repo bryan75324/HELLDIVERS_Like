@@ -37,6 +37,7 @@ public class MobInfo
     public FSMSystem m_FSMSystem;
     public MobAnimationsController m_AnimationController;
     public MobAimLine m_MobAimLine;
+    public SoundManager m_SoundManager;
     public Player m_Player;
 
 

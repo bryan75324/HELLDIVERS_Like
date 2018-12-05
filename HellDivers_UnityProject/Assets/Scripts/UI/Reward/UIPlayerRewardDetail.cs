@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace HELLDIVERS.UI
 {
+    [RequireComponent(typeof(SoundManager))]
     [RequireComponent(typeof(UITweenCanvasAlpha))]
     public class UIPlayerRewardDetail : MonoBehaviour
     {
@@ -13,9 +14,23 @@ namespace HELLDIVERS.UI
         [SerializeField] private Text m_textLabel;
         [SerializeField] private Text m_textNumber;
         private UITweenCanvasAlpha m_CanvasTween;
+        private SoundManager m_SoundManager;
         private int m_iNumber;
         private int m_iCurrentNum;
         private int m_iEvulateRate;
+
+        public event UIEventHolder OnCountNumStart;
+
+        public event UIEventHolder OnCountNumStop;
+
+        private void Awake()
+        {
+            m_CanvasTween = this.GetComponent<UITweenCanvasAlpha>();
+            m_SoundManager = this.GetComponent<SoundManager>();
+
+            SoundDataSetting soundData = Resources.Load("Sounds/Reward/Detial_SoundDataSetting") as SoundDataSetting;
+            m_SoundManager.SetAudioClips(soundData.SoundDatas);
+        }
 
         public void Initialize(string label, int number)
         {
@@ -29,11 +44,13 @@ namespace HELLDIVERS.UI
 
         public void StartCountNum()
         {
+            if (OnCountNumStart != null) OnCountNumStart();
             StartCoroutine(EvulateNum());
         }
 
         private IEnumerator EvulateNum()
         {
+            m_SoundManager.PlayOnce(0);
             m_textNumber.text = m_iCurrentNum.ToString();
             while (m_iCurrentNum < m_iNumber)
             {
@@ -42,11 +59,8 @@ namespace HELLDIVERS.UI
                 m_textNumber.text = m_iCurrentNum.ToString();
                 yield return null;
             }
-        }
-
-        private void Awake()
-        {
-            m_CanvasTween = this.GetComponent<UITweenCanvasAlpha>();
+            m_SoundManager.Stop();
+            if (OnCountNumStop != null) OnCountNumStop();
         }
     }
 }

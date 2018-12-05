@@ -30,9 +30,17 @@ public class UIMapPoint : MonoBehaviour {
                 fish.OnDeath += HidePoint;
                 break;
             case eMapPointType.MISSIONTOWER:
+                m_Image = this.GetComponent<Image>();
+                //m_Color.r = 0.2666f;
+                //m_Color.g = 0.843f;
+                //m_Color.b = 1;
+                m_Color = m_Image.color;
                 MissionTower missionTower = target.GetComponent<MissionTower>();
                 missionTower.OnActive += CompletePoint;
-                ShowPoint();
+                missionTower.OnActivating += MobManager.m_Instance.StopAutoSpawn;
+                missionTower.OnActive += MobManager.m_Instance.StartAutoSpawn;
+                UIPanelMap.Instance.DisplayPoint += ShowPoint;
+                UIPanelMap.Instance.HidePoint += ClosePoint;
                 break;
         }
     }
@@ -49,18 +57,13 @@ public class UIMapPoint : MonoBehaviour {
         switch (m_CurrentType)
         {
             case eMapPointType.PLAYER:
+                UIPanelMap.Instance.DisplayPoint += ShowPoint;
+                UIPanelMap.Instance.HidePoint += ClosePoint;
                 m_CurrentPlayer.OnSpawnBegin += ShowPoint;
                 m_CurrentPlayer.OnDeathBegin += HidePoint;
                 break;
         }
     }
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -81,8 +84,14 @@ public class UIMapPoint : MonoBehaviour {
             case eMapPointType.MISSIONTOWER:
                 MissionTower missionTower = m_CurrentTarget.GetComponent<MissionTower>();
                 missionTower.OnActive -= CompletePoint;
+                missionTower.OnActivating -= MobManager.m_Instance.StopAutoSpawn;
+                missionTower.OnActive -= MobManager.m_Instance.StartAutoSpawn;
+                UIPanelMap.Instance.DisplayPoint -= ShowPoint;
+                UIPanelMap.Instance.HidePoint -= ClosePoint;
                 break;
             case eMapPointType.PLAYER:
+                UIPanelMap.Instance.DisplayPoint -= ShowPoint;
+                UIPanelMap.Instance.HidePoint -= ClosePoint;
                 m_CurrentPlayer.OnSpawnBegin -= ShowPoint;
                 m_CurrentPlayer.OnDeathBegin -= HidePoint;
                 break;
@@ -92,16 +101,18 @@ public class UIMapPoint : MonoBehaviour {
     private void ShowPoint()
     {
         this.gameObject.SetActive(true);
+        m_Color.a = 0.8f;
+        m_Image.color = m_Color;
         CalculatePosition();
+        if(m_CurrentType == eMapPointType.PLAYER)
+        {
+            this.transform.SetAsLastSibling();
+        }
     }
-
-    private void CompletePoint()
+    private void ClosePoint()
     {
-        m_Image = this.GetComponent<Image>();
-        m_Color = m_Image.color;
-        m_Color.r = 192.0f / 255.0f;
-        m_Color.g = 192.0f / 255.0f;
-        m_Color.b = 192.0f / 255.0f;
+        this.gameObject.SetActive(true);
+        m_Color.a = 0.0f;
         m_Image.color = m_Color;
     }
 
@@ -116,6 +127,16 @@ public class UIMapPoint : MonoBehaviour {
                 ObjectPool.m_Instance.UnLoadObjectToPool(9201, this.gameObject);
                 break;
         }
+    }
+
+    private void CompletePoint()
+    {
+        m_Image = this.GetComponent<Image>();
+        m_Color = m_Image.color;
+        m_Color.r = 0.5f;
+        m_Color.g = 0.5f;
+        m_Color.b = 0.5f;
+        m_Image.color = m_Color;
     }
 
     private void FindRadarCenter()

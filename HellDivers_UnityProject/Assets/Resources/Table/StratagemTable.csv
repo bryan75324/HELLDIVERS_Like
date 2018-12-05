@@ -1,5 +1,5 @@
 id,rank,title,type,code,uses,cooldown,activation,display,item,blank
-2000,1,Respawn,1,123012,-1,5,15,st01,2100,0
+2000,1,Respawn,1,123012,-1,5,5,st01,2100,0
 2001,1,REP-80,1,133,3,30,9,st01,2101,0
 2002,2,Resupply,1,122,3,30,9,st01,2102,0
 2003,3,AD-289 Angle,1,2301,3,180,6,st01,2103,0

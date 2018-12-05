@@ -96,7 +96,7 @@ public class InGamePlayerManager : MonoBehaviour
     private IEnumerator RespawnProcess(Player player)
     {
         yield return new WaitForSeconds(RespawnTime);
-        LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemies") | 1 << LayerMask.NameToLayer("Obstacle");
+        LayerMask layerMask = 1 << LayerMask.NameToLayer("Enemies") | 1 << LayerMask.NameToLayer("Obstcale");
         Vector3 spawnPos = player.transform.position;
         bool bBlock;
         do

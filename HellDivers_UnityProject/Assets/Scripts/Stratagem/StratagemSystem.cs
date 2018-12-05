@@ -17,7 +17,7 @@ public static class StratagemSystem
         {
             if (setting == null)
             {
-                setting = Resources.Load<StratagemSetting>("StratagemSetting");
+                setting = Resources.Load<StratagemSetting>("Stratagems/Setting/StratagemSetting");
                 if (setting == null)
                 {
                     Debug.LogErrorFormat("Stratagem Error : Load setting file faild");

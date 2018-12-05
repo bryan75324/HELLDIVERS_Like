@@ -30,9 +30,9 @@ namespace HELLDIVERS.UI.InGame
             m_PanelMap = Instantiate(m_PanelMap, this.transform);
             m_PanelRadar.Init();
             m_PanelMap.Init();
+            m_PanelMissionInfo = Instantiate(m_PanelMissionInfo, this.transform);
             m_PanelMissionBriefing = Instantiate(m_PanelMissionBriefing, this.transform);
             m_PanelMissionBriefing.Init(MapInfo.Instance);
-            m_PanelMissionInfo = Instantiate(m_PanelMissionInfo, this.transform);
             m_PanelMissionCompleted = Instantiate(m_PanelMissionCompleted, this.transform);
             m_PanelMissionFaild = Instantiate(m_PanelMissionFaild, this.transform);
         }
@@ -96,6 +96,7 @@ namespace HELLDIVERS.UI.InGame
         public void AddMissionInfo(Mission mission)
         {
             m_PanelMissionInfo.AddMissionInfo(mission);
+            m_PanelMissionBriefing.AddMission(mission);
         }
 
         public void DrawMissionBrefingUI()
@@ -112,6 +113,7 @@ namespace HELLDIVERS.UI.InGame
 
         public void DrawMissionFailedUI()
         {
+            m_PanelMissionFaild.gameObject.SetActive(true);
             m_PanelMissionFaild.transform.SetAsLastSibling();
             m_PanelMissionFaild.StartUI();
         }

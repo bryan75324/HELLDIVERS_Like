@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ControllerTesting : MonoBehaviour {
 
-    [SerializeField] WelcomeButtonController buttonController;
-    [SerializeField] AxisEvent axis;
-    [SerializeField] AudioSource audio;
+    [SerializeField] WelcomeButtonController m_ButtonController;
+    [SerializeField] AxisEvent m_Axis;
+    [SerializeField] AudioSource m_Audio;
     private ControllerSetting m_ControllerSetting1;
     private ControllerSetting m_ControllerSetting2;
 
@@ -16,10 +16,7 @@ public class ControllerTesting : MonoBehaviour {
     void Start () {
         m_ControllerSetting1 = InputManager.Instance.InputSettingMap[1];
         m_ControllerSetting2 = InputManager.Instance.InputSettingMap[2];
-        //if (!PlayerManager.Instance.Players.ContainsKey(1) && !PlayerManager.Instance.Players.ContainsKey(2))
-        //{
-        //    PlayerManager.Instance.CreatePlayer(1, m_ControllerSetting1);
-        //}
+
 
     }
 
@@ -31,16 +28,16 @@ public class ControllerTesting : MonoBehaviour {
         }
 		if (Input.GetKey(m_ControllerSetting1.Submit))
         {
-            buttonController.SetController(m_ControllerSetting1);
-            axis.SetController(m_ControllerSetting1);
-            audio.Play();
+            m_ButtonController.SetController(m_ControllerSetting1);
+            m_Axis.SetController(m_ControllerSetting1);
+            m_Audio.Play();
             m_Interactive = true;
         }
         else if(Input.GetKey(m_ControllerSetting2.Submit))
         {
-            buttonController.SetController(m_ControllerSetting2);
-            axis.SetController(m_ControllerSetting2);
-            audio.Play();
+            m_ButtonController.SetController(m_ControllerSetting2);
+            m_Axis.SetController(m_ControllerSetting2);
+            m_Audio.Play();
             m_Interactive = true;
         }
 	}

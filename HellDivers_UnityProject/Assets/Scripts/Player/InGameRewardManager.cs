@@ -7,10 +7,12 @@ public class InGameRewardManager : MonoBehaviour
     static public InGameRewardManager Instance { get { return m_instance; } }
     static private InGameRewardManager m_instance;
 
+    public bool IsMissionSuccess { get { return m_bMissionSuccess; } }
     public float GameDurationTime { get { return m_GameDurationTime; } }
     public Dictionary<int, PlayerRecord> PlayerRewardMap { get { return m_RecordMap; } }
     public Dictionary<eMissionType, List<MissionReward>> MissionRewardMap { get { return m_MissionRewardMap; } }
 
+    private bool m_bMissionSuccess;
     private Dictionary<int, PlayerRecord> m_RecordMap;
     private Dictionary<eMissionType, List<MissionReward>> m_MissionRewardMap;
     private float m_GameDurationTime;
@@ -43,6 +45,11 @@ public class InGameRewardManager : MonoBehaviour
         {
             m_RecordMap.Add(SerialNum, record);
         }
+    }
+
+    public void SetMissionResult(bool success)
+    {
+        m_bMissionSuccess = success;
     }
 
     public void SetGameDurationTime(float time)

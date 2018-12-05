@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HELLDIVERS.UI;
+using HELLDIVERS.UI.InGame;
 
 public class UIMissionBriefing : MonoBehaviour
 {
-    [SerializeField] private Transform m_PanelMap;
+    [SerializeField] private UITweenCanvasAlpha m_UITweenCanvasAlpha;
     [SerializeField] private UIMissionBriefingMap m_Map;
-    [SerializeField] private GameObject m_GOConcentric;
+    [SerializeField] private UIMissionBriefingIntroduction m_MissionIntroduction;
+    [SerializeField] private Transform m_PanelMap;
     [SerializeField] private Image m_Backround;
     [SerializeField] private Color m_BackroundColor;
 
     public static UIMissionBriefing Instance { get; private set; }
 
     public UIMissionBriefingMap Map { get { return m_Map; } }
-    public GameObject Concentric { get { return m_GOConcentric; } }
+    public UIMissionBriefingIntroduction MissionIntroduction { get { return m_MissionIntroduction; } }
 
     private void Awake()
     {
@@ -29,9 +32,13 @@ public class UIMissionBriefing : MonoBehaviour
         for (int i = 0; i < mapInfo.SpawnPos.Count; i++)
         {
             AddPoint(mapInfo.SpawnPos[i].gameObject, eMapPointType.SPAWNPOINT);
-            Debug.Log("Creata SpawnPoint");
         }
         m_Map.Concentric.OnClick += ComfirmSpawnPosition;
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void DrawUI()
@@ -39,35 +46,30 @@ public class UIMissionBriefing : MonoBehaviour
         this.transform.SetAsLastSibling();
     }
 
+    public void AddMission(Mission mission)
+    {
+        m_MissionIntroduction.AddMissionInfo(mission);
+    }
+
     public void AddPoint(GameObject target, eMapPointType type)
     {
         m_Map.AddPointPrefab(target, type);
     }
 
+    public void MissionSelected()
+    {
+        //m_MissionIntroduction.Selected();
+    }
+
     public void ComfirmSpawnPosition()
     {
-        //Debug.Log(m_BackroundColor.a);
         if (m_Map.ComfirmSpawnPosition())
         {
-            StartCoroutine(FadeOut());
+            this.transform.SetAsLastSibling();
+            m_UITweenCanvasAlpha.PlayBackward();
+            m_UITweenCanvasAlpha.OnTweenFinished += () => { Destroy(this.gameObject); };
             m_Map.Concentric.OnClick -= ComfirmSpawnPosition;
         }
         return;
-    }
-
-    IEnumerator FadeOut()
-    {
-        for (m_BackroundColor.a = 0.0f ; m_BackroundColor.a < 1; m_BackroundColor.a += Time.deltaTime * 0.5f)
-        {
-            m_Backround.color = m_BackroundColor;
-
-            if (m_BackroundColor.a > 0.9f)
-            {
-                Destroy(this.gameObject);
-                yield break;
-            }
-            yield return 0;
-        }
-        yield return 0;
     }
 }

@@ -10,6 +10,7 @@ public class WelcomeButtonController : MonoBehaviour {
     [Header("== Button ==")]
     [SerializeField] Button m_Start;
     [SerializeField] Button m_Continue;
+    [SerializeField] Button m_Producer;
     [SerializeField] Button m_Exit;
     [SerializeField] Button m_Press;
     [Header("== Circle ==")]
@@ -32,6 +33,7 @@ public class WelcomeButtonController : MonoBehaviour {
         SetPress();
         SetStart();
         SetContinue();
+        SetCredits();
         SetExit();
         m_fTimer = 0.2f;
     }
@@ -54,9 +56,9 @@ public class WelcomeButtonController : MonoBehaviour {
 
     private void SetPress()
     {
-        m_Press.onClick.AddListener(() => SetSelectGO(m_Continue));
-        m_Press.onClick.AddListener(() => Change(m_Press.gameObject, m_Menu));
         m_Press.onClick.AddListener(() => m_bSetting = true);
+        m_Press.onClick.AddListener(() => Change(m_Press.gameObject, m_Menu));
+        m_Press.onClick.AddListener(() => SetSelectGO(m_Continue));
     }
 
     private void SetStart()
@@ -70,7 +72,13 @@ public class WelcomeButtonController : MonoBehaviour {
     {
         AddEvent(m_Continue);
         m_Continue.onClick.AddListener(() => DataLoader(1));
-        m_Continue.onClick.AddListener(()=> StartCoroutine(ChangeScene()));
+        m_Continue.onClick.AddListener(() => StartCoroutine(ChangeScene()));
+    }
+
+    private void SetCredits()
+    {
+        AddEvent(m_Producer);
+        m_Producer.onClick.AddListener(() => StartCoroutine(ChangeScene(false)));
     }
 
     private void SetExit()
@@ -90,11 +98,12 @@ public class WelcomeButtonController : MonoBehaviour {
     }
 
     //For Continue
-    IEnumerator ChangeScene()
+    IEnumerator ChangeScene(bool toLobby = true)
     {
         CloseButton();
         yield return new WaitForSeconds(1.5f);
-        SceneController.Instance.ToLobby();
+        if (toLobby) SceneController.Instance.ToLobby();
+        else SceneController.Instance.ToCredits();
     }
 
     #endregion
@@ -107,6 +116,7 @@ public class WelcomeButtonController : MonoBehaviour {
         m_FadePanel.SetActive(true);
         m_Start.interactable = false;
         m_Continue.interactable = false;
+        m_Producer.interactable = false;
         m_Exit.interactable = false;
     }
 
@@ -125,6 +135,7 @@ public class WelcomeButtonController : MonoBehaviour {
     {
         Vector3 pos = m_Circle.transform.position;
         pos.y = go.transform.position.y;
+        pos.x = go.transform.position.x - 10;
         m_Circle.transform.position = pos;
     }
 

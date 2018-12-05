@@ -11,6 +11,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         [SerializeField] Image m_Top;
         [SerializeField] Text m_tPlayerName;
         [SerializeField] Text m_tRank;
+        [SerializeField] Image m_iRank;
         [SerializeField] Text m_tConfirm;
         [SerializeField] Image m_Confirm;
     [Header("== Prefabs Setting ==")]
@@ -23,7 +24,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         [SerializeField] GameObject m_SecondaryWeapon;
         [SerializeField] GameObject m_Stratagem;
     [Header("== Set Audio ==")]
-        [SerializeField] AudioSource m_Audio;
+        [SerializeField] LobbyAudio m_Audio;
     [Header("== Private Field  ==")]
     [SerializeField] int _CurStratagemPos;
     #endregion
@@ -33,6 +34,7 @@ public class SetPlayerWeapon : MonoBehaviour {
     public int PriWeaponID { private set; get; }
     public int SecWeaponID { private set; get; }
     public int CurStratagemPos { get { return _CurStratagemPos; } }
+    public LobbyAudio Audio { get { return m_Audio; } }
     public ControlEvent Control { get { return m_Control; } }
     public bool m_bPrimary;
     public GameObject m_primary;
@@ -59,7 +61,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         SetPlayer(PlayerID);
         m_CurrentObject = m_Confirm.gameObject;
         OnSelect();
-        m_Audio.Stop();
+        Audio.StopSound();
         SubscriptAxisEvent();
     }
 
@@ -84,12 +86,15 @@ public class SetPlayerWeapon : MonoBehaviour {
     {
         m_Top.color = (player == 1) ? HELLDIVERS.UI.UIHelper.Player1_Color : HELLDIVERS.UI.UIHelper.Player2_Color;
         m_tRank.color = (player == 1) ? HELLDIVERS.UI.UIHelper.Player1_Color : HELLDIVERS.UI.UIHelper.Player2_Color;
-        m_tRank.text = PlayerManager.Instance.Players[player].info.Rank.ToString();
-        m_tPlayerName.text = PlayerManager.Instance.Players[player].info.Username;
+        PlayerInfo info = PlayerManager.Instance.Players[player].info;
+        m_tRank.text = info.Rank.ToString();
+        string rankIcon = string.Format("icon_rank_{0}", info.Rank.ToString("00"));
+        m_iRank.sprite = ResourceManager.m_Instance.LoadSprite(typeof(Sprite), HELLDIVERS.UI.UIHelper.RankIconFolder, rankIcon);
+        m_tPlayerName.text = info.Username;
 
         InitialWeapon(ref m_primary, player, 1, true);
         InitialWeapon(ref m_secondary, player, 0, false);
-
+        
         InitialStratagems(player, 0);
         InitialStratagems(player, 1);
         InitialStratagems(player, 2);
@@ -144,10 +149,10 @@ public class SetPlayerWeapon : MonoBehaviour {
 
     public void SetSecWeaponID(int i) { SecWeaponID = i; }
 
-    public void PlayAudio()
+    public void PlayAudio(AudioSource source)
     {
-        m_Audio.pitch = Random.Range(0.95f, 1.5f);
-        m_Audio.Play();
+        source.pitch = Random.Range(0.95f, 1.5f);
+        source.Play();
     }
 
     #endregion
@@ -185,7 +190,6 @@ public class SetPlayerWeapon : MonoBehaviour {
         m_tConfirm.text = "CORFIRM";
         SetColor(ref m_Confirm, m_HighLight);
         this.GetComponentInParent<PlayArmoury>().SetPlayerState(PlayerID, false);
-        Control.AxisCancel -= ButtonCanael;
         SubscriptAxisEvent();
     }
 
@@ -222,7 +226,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         if (right) _CurStratagemPos++;
         else _CurStratagemPos--;
         m_Stratagems[CurStratagemPos].GetComponent<LobbyUI_Stratagems>().SetHighlightBG();
-        PlayAudio();
+        Audio.PlaySelectSound(1);
     }
 
     private void NavRight()
@@ -308,7 +312,7 @@ public class SetPlayerWeapon : MonoBehaviour {
             SetObject(m_Stratagem, m_Confirm.gameObject);
             OnConfirm();
         }
-        PlayAudio();
+        Audio.PlaySelectSound(1);
     }
 
     private void DisSelect()
@@ -352,6 +356,7 @@ public class SetPlayerWeapon : MonoBehaviour {
         {
             SubmitConfirm();
         }
+        Audio.PlayClickSound(1);
     }
 
     private void SetColor(ref Image target, Color color) { target.color = color; }

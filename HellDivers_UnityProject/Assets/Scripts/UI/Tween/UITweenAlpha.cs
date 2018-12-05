@@ -17,7 +17,7 @@ namespace HELLDIVERS.UI
             { return m_time; }
             set
             {
-                if (value < 0) m_time = 0;
+                if (value <= 0) m_time = 0.01f;
                 else m_time = value;
             }
         }
@@ -28,7 +28,7 @@ namespace HELLDIVERS.UI
 
         #region Serialize Field
 
-        [SerializeField] protected float m_time = 1;
+        [SerializeField] [Range(0.01f, 100)] protected float m_time = 1;
         [SerializeField] protected AnimationCurve m_AnimaCurve;
 
         #endregion Serialize Field

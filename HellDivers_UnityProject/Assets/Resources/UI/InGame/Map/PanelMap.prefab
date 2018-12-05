@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 224333570064272000}
   - component: {fileID: 222698936020198778}
   - component: {fileID: 114133932290455980}
-  - component: {fileID: 114718424299829264}
   - component: {fileID: 114334073510836276}
   m_Layer: 5
   m_Name: PanelMap
@@ -42,7 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  m_Color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 0.39215687}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -68,22 +67,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4addd8f866ed4024598d389002b8398b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PanelRadar: {fileID: 114207931069894668, guid: 3816279d079b678489e3131ac48400b9,
+    type: 2}
   m_PointPrefab: {fileID: 0}
   m_MapRadius: 40
   m_MapWidth: 544
   m_MapHeight: 720
---- !u!114 &114718424299829264
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1571236337490902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
 --- !u!222 &222698936020198778
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -103,8 +92,8 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -460, y: 20}
-  m_SizeDelta: {x: 408, y: 540}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -306, y: -405}
+  m_SizeDelta: {x: 612, y: 810}
   m_Pivot: {x: 0, y: 0}

@@ -250,6 +250,7 @@ public class UIStratagemsList : MonoBehaviour {
         SetInfo(go);
         OnValueChange(go);
         go.GetComponent<LobbyUI_Stratagems>().SetHighlightBG();
+        stratagemsDisplay.SetPlayer.Audio.PlaySelectSound(1);
     }
 
     private void DisSelectEvent(GameObject go)
@@ -263,6 +264,7 @@ public class UIStratagemsList : MonoBehaviour {
         UnsubscribeAxisEvent();
         OnClickCheck();
         stratagemsDisplay.SetPlayer.SetStratagems(stratagemsDisplay.SetPlayer.CurStratagemPos, stratagemsDisplay.Info.ID);
+        stratagemsDisplay.SetPlayer.Audio.PlayClickSound(1);
         stratagemsDisplay.SetPlayer.SelectStratagemUI(false);
     }
 

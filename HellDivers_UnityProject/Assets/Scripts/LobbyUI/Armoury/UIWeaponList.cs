@@ -268,15 +268,19 @@ public class UIWeaponList : MonoBehaviour {
         }
         SetInfo(go);
         weaponDisplay.Button.CheckLevelUp();
-        weaponDisplay.SetPlayer.PlayAudio();
+        weaponDisplay.SetPlayer.Audio.PlaySelectSound(1);
     }
 
     private void DisSelectEvent(GameObject go)
     {
         go.GetComponent<LobbyUI_Weapon>().SetBG();
-        m_LockPanel.SetActive(false);
+        if (m_currentCount > m_unlockWeaponCount - 1)
+        {
+            m_LockPanel.SetActive(false);
+        }
+
     }
-    
+
     private void OnClickEvent() 
     {
         if (m_currentCount > m_unlockWeaponCount - 1) return;
@@ -285,6 +289,7 @@ public class UIWeaponList : MonoBehaviour {
         UnsubscribeAxisEvent();
         weaponDisplay.Button.SetCancel();
         weaponDisplay.Button.OnSelectButton();
+        weaponDisplay.SetPlayer.Audio.PlayClickSound(1);
     }
 
     public void Return()

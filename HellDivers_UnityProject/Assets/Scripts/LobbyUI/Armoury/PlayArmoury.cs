@@ -50,7 +50,7 @@ public class PlayArmoury : MonoBehaviour {
 
     public void CreatPlayerMenu(int i)
     {
-        Vector3 pos = new Vector3(150 + 810 * (i - 1), 780, 0);
+        Vector3 pos = new Vector3(150 + 810 * (i - 1), 805, 0);
         Quaternion rotate = new Quaternion(0, 0, 0, 1);
         GameObject go = Instantiate(m_PlayerInGame, pos, rotate, this.transform);
         go.name = "Player" + i;

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede7f0d4920f77e428f8f618c82ddf5b, type: 3}
+  m_Name: SoundDataSetting
+  m_EditorClassIdentifier: 
+  m_SoundDatas:
+  - Id: 1010
+    audioClip: {fileID: 8300000, guid: 251ddfb9409c0d04e81db7b84b67168e, type: 3}
+    volumeScale: 0.5
+  - Id: 1011
+    audioClip: {fileID: 8300000, guid: 543bc088fc85f894c8c93c8b0f08bd09, type: 3}
+    volumeScale: 0.5
+  - Id: 1012
+    audioClip: {fileID: 8300000, guid: 6d6bdf8a7c1916a4e9175a5e95b51cfa, type: 3}
+    volumeScale: 0.5
+  - Id: 1020
+    audioClip: {fileID: 8300000, guid: 00ebee4f7a32f0346915a2327e9d8ecf, type: 3}
+    volumeScale: 0.5
+  - Id: 1021
+    audioClip: {fileID: 8300000, guid: f50c050daba72f841b12175fbfdd577e, type: 3}
+    volumeScale: 0.5
+  - Id: 1022
+    audioClip: {fileID: 8300000, guid: b33411259828b4f4aa0d469f4205a270, type: 3}
+    volumeScale: 0.5
+  - Id: 1030
+    audioClip: {fileID: 8300000, guid: b33411259828b4f4aa0d469f4205a270, type: 3}
+    volumeScale: 0.5
+  - Id: 1031
+    audioClip: {fileID: 8300000, guid: b33411259828b4f4aa0d469f4205a270, type: 3}
+    volumeScale: 0.5
+  - Id: 1032
+    audioClip: {fileID: 8300000, guid: b33411259828b4f4aa0d469f4205a270, type: 3}
+    volumeScale: 0.5
+  - Id: 1033
+    audioClip: {fileID: 8300000, guid: b33411259828b4f4aa0d469f4205a270, type: 3}
+    volumeScale: 0.5
+  - Id: 1040
+    audioClip: {fileID: 8300000, guid: d680e5243dc47fb4781c00261c055ad2, type: 3}
+    volumeScale: 0.25

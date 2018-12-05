@@ -120,7 +120,7 @@ public class PlayerFSMStartState : PlayerFSMState
 
     public override void CheckCondition(PlayerController data)
     {
-        if(fTimer > 1.0f) data.m_PlayerFSM.PerformTransition(ePlayerFSMTrans.Go_Gun);
+        if(fTimer > 3.0f) data.m_PlayerFSM.PerformTransition(ePlayerFSMTrans.Go_Gun);
         //AnimatorStateInfo info = data.m_Animator.GetCurrentAnimatorStateInfo(0);
         //if (info.IsName("Standing"))
         //{
@@ -415,7 +415,6 @@ public class PlayerFSMThrowBombState : PlayerFSMState
     int throwCount = 0;
     bool bHolding = false;
     bool bThrow = true;
-    bool bFollowing = true;
     public PlayerFSMThrowBombState()
     {
         m_StateID = ePlayerFSMStateID.ThrowBombStateID;
@@ -427,7 +426,6 @@ public class PlayerFSMThrowBombState : PlayerFSMState
         throwCount = 0;
         bHolding = false;
         bThrow = true;
-        bFollowing = true;
         data.m_MoveMode = "Throw";
         data.m_PAC.SetAnimator(m_StateID, false);
     }
@@ -453,10 +451,6 @@ public class PlayerFSMThrowBombState : PlayerFSMState
                 count++;
             }
         }
-        if (bFollowing)
-        {
-            data.m_GrenadesController.Following();
-        }
         if (!Input.GetButton("Grenade") && Input.GetAxis(data.InputSetting.Grenade) == 0)
         {
             data.m_MoveMode = "Throwing";
@@ -474,7 +468,6 @@ public class PlayerFSMThrowBombState : PlayerFSMState
             if (info.normalizedTime > 0.4f && throwCount < 1)
             {
                 throwCount++;
-                bFollowing = false;
                 data.m_GrenadesController.Throw();
             }
         }

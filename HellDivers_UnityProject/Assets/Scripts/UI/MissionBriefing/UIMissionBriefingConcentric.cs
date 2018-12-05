@@ -11,8 +11,7 @@ public class UIMissionBriefingConcentric : MonoBehaviour {
     #endregion
 
     [SerializeField] private UIMissionBriefingMap m_Map;
-
-    private string m_OriIntroduction;
+    
     private RectTransform m_MapRect;
     private Vector3 m_Pos;
     private float m_RectWidth;
@@ -29,7 +28,6 @@ public class UIMissionBriefingConcentric : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetButtonDown("Submit"))
         {
             if (OnClick != null) OnClick();
-            //UIMissionBriefing.Instance.ComfirmSpawnPosition();
         }
     }
 

@@ -20,12 +20,16 @@ public class EffectController : MonoBehaviour {
     }
     private void UnLoadObject()
     {
-        ObjectPool.m_Instance.UnLoadObjectToPool(m_ID, this.gameObject);
+        ObjectPool.m_Instance.UnLoadObjectToPool(m_ID, this.gameObject);    
     }
     #endregion
 
     #region MonoBehaviors
-    void Awake () { m_Animator = GetComponent<Animator>(); }
+    void Awake ()
+    {
+        m_Animator = GetComponent<Animator>();
+        if (m_Animator == null) GetComponentInChildren<Animator>();
+    }
 
     private void OnEnable() { EffectStart(); }
 

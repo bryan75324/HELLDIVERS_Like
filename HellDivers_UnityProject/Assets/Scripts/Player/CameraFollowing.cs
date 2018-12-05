@@ -52,10 +52,9 @@ public class CameraFollowing : MonoBehaviour
     [SerializeField] private float m_CamLerp = 0.1f;
     [SerializeField] private float m_CamWalkAdd = 3.0f;
     private float m_CurrentLerp;
-    private float m_fTimer;
-    private float m_fTime = 2; 
     private Vector3 m_Destination;
     private Vector2 m_ExtraVec;
+    private bool m_bCreate;
 
     #endregion Private Variable
 
@@ -80,6 +79,8 @@ public class CameraFollowing : MonoBehaviour
     {
         m_Targets.AddLast(t);
         CheckToEnable();
+        if(!m_bCreate) StartCoroutine(CreateBorder());
+        Borderable();
     }
 
     /// <summary>
@@ -90,6 +91,7 @@ public class CameraFollowing : MonoBehaviour
         if (m_Targets.Remove(t))
         {
             CheckToDisable();
+            Borderable();
             return true;
         }
         else return false;
@@ -106,18 +108,13 @@ public class CameraFollowing : MonoBehaviour
         m_Cam.transform.rotation = Quaternion.Euler(m_CamRotX, 0, 0);
         m_Cam.fieldOfView = 60.0f;
         m_CurrentLerp = m_CamLerp;
-        StartCoroutine(CreateBorder());
+        
     }
 
     // Update is called once per frame
     private void Update()
     {
         if (m_Targets.Count <= 0) return;
-        if (m_fTimer < 0)
-        {
-            Borderable();
-            m_fTimer = m_fTime;
-        }
 
         UpdateDestination();
 
@@ -143,7 +140,6 @@ public class CameraFollowing : MonoBehaviour
 
         MoveToDestination();
 
-        m_fTimer -= Time.fixedDeltaTime;
     }
 
     #endregion MonoBehaviour
@@ -156,6 +152,7 @@ public class CameraFollowing : MonoBehaviour
         DefineBorder( ref m_box2, 3, 4, 2);
         DefineBorder( ref m_box3, 5, 6, 4);
         DefineBorder( ref m_box4, 7, 6, 0);
+        m_bCreate = true;
     }
 
     private void DefineBorder( ref BoxCollider b, int i, int small, int big)

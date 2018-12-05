@@ -7,10 +7,12 @@ public class FireBomb : MonoBehaviour {
     private float m_Timer = 0.0f;
     private int m_AttackCount = 0;
     private Animator m_Animator;
+    
     // Use this for initialization
     private void OnEnable()
     {
         if(m_Animator == null) m_Animator = this.GetComponent<Animator>();
+       
         m_Animator.SetTrigger("startTrigger");
         m_Timer = 0.0f;
         m_AttackCount = 0;
